@@ -1,0 +1,22 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tu página</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/form.css' %}">
+</head>
+<body>
+<h1>REGISTRO</h1>
+
+    <!-- Resto del contenido de tu plantilla -->
+
+{{error}}
+
+<form action="/singup/" method="post"> 
+ {% csrf_token %}
+{{form.as_p}}
+<button>Registrar</button>
+</form>
+</body>
+</html>
