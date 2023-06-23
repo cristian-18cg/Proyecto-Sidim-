@@ -7,7 +7,8 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from django.views.generic import TemplateView
+from django.conf import settings
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -229,13 +230,26 @@ class Transacciones(models.Model):
 
 class Usuarios(models.Model):
     idusuario = models.IntegerField(primary_key=True)
-    nombre = models.CharField(max_length=30)
-    apellido = models.CharField(max_length=30)
+    nombre = models.CharField(max_length=45)
+    apellido = models.CharField(max_length=45)
     correo = models.CharField(max_length=45,unique=True)
     contrasena = models.CharField(max_length=15)
-    telefono = models.CharField(max_length=12)
+    telefono = models.CharField(max_length=10)
     direccion = models.CharField(max_length=100)
     USERNAME_FIELD = 'correo'
     class Meta:
         managed = False
         db_table = 'usuarios'
+
+# Create your views here.
+
+
+
+
+class MiVista(TemplateView):
+    template_name = 'base.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['MEDIA_URL'] = settings.MEDIA_URL
+        return context
+    

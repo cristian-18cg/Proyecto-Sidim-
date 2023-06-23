@@ -7,16 +7,14 @@ from django.db import IntegrityError
 from .form import UsuariosCreationForm
 
 
-# Create your views here.
-
-
-
 def home(request):
    
     return render(request,'home.html')
 
+
 def singup(request):       #registro de usuario    
- 
+   
+     
     if request.method == 'POST':
         form = UsuariosCreationForm(request.POST)
         if form.is_valid():
