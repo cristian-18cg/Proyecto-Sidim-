@@ -8,21 +8,26 @@ from .form import UsuariosCreationForm
 
 
 def home(request):
+   if request.method == 'POST':
+        form = UsuariosCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # Reemplaza 'ruta_de_redireccion' con la URL a la que quieres redirigir después del registro exitoso
+   else:
+        form = UsuariosCreationForm()       
+   return render(request, 'home.html', {'form': form})
    
-    return render(request,'home.html')
 
 
 def singup(request):       #registro de usuario    
-   
-     
     if request.method == 'POST':
         form = UsuariosCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('singup')  # Reemplaza 'ruta_de_redireccion' con la URL a la que quieres redirigir después del registro exitoso
+            return redirect('Home')  # Reemplaza 'ruta_de_redireccion' con la URL a la que quieres redirigir después del registro exitoso
     else:
         form = UsuariosCreationForm()
-    return render(request, 'singup.html', {'form': form})
+    return render(request, 'home.html', {'form': form})
 
     # if request.method == 'GET':
     #     print ('enviando formulario')

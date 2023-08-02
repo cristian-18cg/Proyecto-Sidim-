@@ -15,7 +15,7 @@ class UsuariosCreationForm(forms.ModelForm):
             'direccion': 'Dirección',
         }
         widgets = {
-            'idusuario': forms.TextInput(attrs={'class': 'my-input-class','placeholder': 'Digita tu cedula 10 numeros'}),
+            'idusuario': forms.TextInput(attrs={'class': '','placeholder': 'Digita tu cedula 10 numeros'}),
             'nombre': forms.TextInput(attrs={'class': 'my-input-class','placeholder': 'Andres'}),
             'apellido': forms.TextInput(attrs={'class': 'my-input-class','placeholder': 'Perez'}),
             'correo': forms.EmailInput(attrs={'class': 'my-input-class','placeholder': 'ejemplo@gmail.com'}),
