@@ -7,11 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}SIDIM{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-
-    <link rel="stylesheet" href="{% static 'css/style.css'%}">
-    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
-    <script src="{% static 'js/modal.js' %}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/code.jquery.com_jquery-3.7.0.min.js' %}"></script>
 </head>
 
 <body>
@@ -30,7 +27,8 @@
                 <div class="icon-container ">
 
                     <svg id="user-icon" xmls="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                        class="bi bi-person-circle" viewBox="0 0 16 16" data-bs-toggle="modal" data-bs-target="#registroModal">
+                        class="bi bi-person-circle" viewBox="0 0 16 16" data-bs-toggle="modal"
+                        data-bs-target="#registroModal">
                         <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                         <path fill-rule="evenodd"
                             d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
@@ -82,13 +80,7 @@
                             <li><a href="#">Aguardiente</a></li>
                         </ul>
                     </li>
-                    <!-- <li><a href="#">Tequilas </a>
-                            <ul class="subsumenu">
-                                <li><a href="#">Añejo</a></li>
-                                <li><a href="#">Blanco</a></li>
-                                <li><a href="#">Cristalino</a></li>
-                            </ul>
-                        </li> -->
+
                     <li><a href="#">Cervezas</a>
                         <ul class="subsumenu">
                             <li><a href="#">Cerveza rubia</a></li>
@@ -116,34 +108,129 @@
             <div class="barra-horizontal"></div>
         </div>
     </header>
-  <div class="modal fade" id="registroModal" tabindex="-1" role="dialog" aria-labelledby="registroModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
+
+
+    <!-- Ventana modal login -->
+    <div class="modal-side" id="loginModal">
         <div class="modal-content">
+            <h2 class="modal-login" style="margin-top: 50px; margin-left: 70px;">Iniciar sesión</h2>
             <div class="modal-header">
-                <h5 class="modal-title" id="registroModalLabel">Registro de usuario</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                <button type="button" class="close close2" data-dismiss="modal" style="margin-top: -140px;">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Contenido del formulario de registro -->
-                <form action="/singup/" method="post" class="my-form">
-                    {% csrf_token %}
-                    {{form.as_p}}
+                <!-- Formulario de inicio de sesión -->
+                <div class="form-group">
+                    <input type="text" class="form-control" id="username" placeholder="Ingrese su nombre de usuario"
+                        required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña"
+                        required>
+                </div>
+                <div>
+                    <p><a class="link-opacity-100" href="#"
+                            style="color: rgb(0, 0, 0); margin-left: 33%; font-weight: bold;">¿Olvidaste
+                            tu contraseña?</a></p>
+                </div>
+                <div>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Entrar</button>
+                    </div>
+                    <p>
+                        <a id="registerLink" class="link-opacity-100" href="#"
+                            style="color: rgb(0, 0, 0); margin-left: 28%; font-weight: bold;">
+                            ¿No tienes cuenta? Regístrate
+                        </a>
+                    </p>
 
-                    <button>Registrarse</button>
-                </form>
+                    <h2 class="modal-login"
+                        style="margin-top: 80px;margin-left: 10px;font-size: 18px;color: black;text-align: center;">
+                        Selecciona
+                        una opcion para ingresar</h2>
+
+                    <button type="button" class="btn btn-primary"
+                        style="background-color: #ffffff; color: rgb(0, 0, 0); margin-top: 20px;color: #3b5998; ">Entrar
+                        con Facebook</button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                        class="icon-facebook bi-facebook" viewBox="0 0 16 16">
+                        <path
+                            d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
+                    </svg>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary"
+                        style="background-color: #ffffff; color: rgb(0, 0, 0);margin-top: -35px;color:#be0101;">Entrar
+                        con Google</button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                        class="google bi-google" viewBox="0 0 16 16">
+                        <path
+                            d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
+                    </svg>
+                </div>
             </div>
         </div>
     </div>
-  </div>
-    
 
-            {% block content %}
 
-            {% endblock %}
-            <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- Ventana modal registro -->
+    <div class="modal-side" id="registerModal">
+        <div class="modal-content">
+            <h2 class="modal-login" style="margin-top: 50px; margin-left: 70px;">Registro</h2>
+            <div class="modal-header">
+                <button type="button" class="close close2" data-dismiss="modal" style="margin-top: -140px;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Formulario de registro -->
+                <form action="/singup/" method="post" class="my-form">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <div>
+                        <button type="submit" class="btn btn-primary">Registrarse</button>
+                    </div>
+                </form>
+                <div>
+                    <!-- Botón "Volver atrás" para regresar al formulario de inicio de sesión -->
+
+                    <p>
+                        <a id="backToLogin" style="margin-top: -10px; color: black;" class="link-back" href="#">
+                            <!--Volver atrás-->
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {% block content %}
+
+    {% endblock %}
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/modal.js' %}"></script>
+    <script src="{% static 'js/registro.js' %}"></script>
+
 </body>
 
 </html>

@@ -236,10 +236,15 @@ class Usuarios(models.Model):
     contrasena = models.CharField(max_length=15)
     telefono = models.CharField(max_length=10)
     direccion = models.CharField(max_length=100)
+
     USERNAME_FIELD = 'correo'
+
+    def __str__(self):
+        return self.nombre + ' ' + self.apellido
     class Meta:
         managed = False
         db_table = 'usuarios'
+      
 
 # Create your views here.
 
