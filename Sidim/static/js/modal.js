@@ -50,3 +50,11 @@
       $('.modal-side').removeClass('open');
     });
   });
+
+  
+  
+  
+  
+  //evita que se cierre el modal si hay errores 
+  
+  

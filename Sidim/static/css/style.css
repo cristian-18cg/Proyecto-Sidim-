@@ -438,7 +438,7 @@ footer {
 /*estilos Css modal login y registro*/
 .modal-side {
   position: fixed;
-  margin-top: -15%;  
+  margin-top: 0;  
   top: 0;
   right: -400px; /* Cambia este valor para ajustar la posición inicial de la ventana */
  /* Cambia este valor para ajustar el ancho de la ventana */
@@ -452,13 +452,14 @@ footer {
 .modal-side.open {
   right: 0;
   width: 40%;
-  height: 150%;
+  min-height: 100%;
   
   
 }
 
 .modal-side .modal-content {
-  height: 80%;
+  height: auto;
+  min-height: 100%;
   border: none;
   border-radius: 10px;
   background-color: #9b9797;
@@ -481,8 +482,7 @@ footer {
 
 .modal-content {
   width: 100%;
-  margin-top: 40%;
-
+  height: auto;
 }
 
 #modal-login a {
@@ -609,7 +609,7 @@ h2{
 }
 
 .my-input-class{
-  padding-top: 10%;
+  padding-top: 4%;
 }
 .close2{
   margin-left: 2%;

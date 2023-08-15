@@ -128,6 +128,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+AUTH_USER_MODEL = 'Sidim.Usuarios'
+AUTHENTICATION_BACKENDS = ['Sidim.backends.UsuariosBackend',
+                           'django.contrib.auth.backends.ModelBackend']
 
 
 # Default primary key field type

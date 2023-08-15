@@ -36,4 +36,27 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+
+
+form = UsuariosCreationForm()
+   if request.method == 'GET':
+      
+       return render(request, 'home.html', {
+           'form': form
+           })
+   else:
+       try:
+          if form.is_valid():
+           form.save()  ## guarda el formulario si todo es valido
+           return redirect('home')
+       except:
+           return render(request, 'home.html', {
+            'form': form,
+            "error":"Este documento ya existe"
+            })
+       
+       return render(request, 'home.html', {
+            'form': form,
+            "error":"Algo salió mal, revisa tus campos."
+            })      

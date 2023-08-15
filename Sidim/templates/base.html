@@ -25,6 +25,22 @@
                     <input type="text" placeholder=" Busca tu bebida preferida">
                 </li>
                 <div class="icon-container ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
+                        class="bi bi-cart-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                    </svg>
+                    {% if user.is_authenticated %}
+
+
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
+                        class="bi bi-bell-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
+                    </svg>
+
+                    <a href="/cerrarsesion">Cerrar Sesion</a> <!-- Cierra sesion y muestra logo de campana  -->
+                    {% else %}
 
                     <svg id="user-icon" xmls="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
                         class="bi bi-person-circle" viewBox="0 0 16 16" data-bs-toggle="modal"
@@ -33,18 +49,8 @@
                         <path fill-rule="evenodd"
                             d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                     </svg>
-
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                        class="bi bi-cart-fill" viewBox="0 0 16 16">
-                        <path
-                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                    </svg>
-
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                        class="bi bi-bell-fill" viewBox="0 0 16 16">
-                        <path
-                            d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
-                    </svg>
+                    <a href="/cerrarsesion">Cerrar Sesion</a>
+                    {% endif %}
 
                 </div>
             </ul>
@@ -120,24 +126,14 @@
                 </button>
             </div>
             <div class="modal-body">
+
+
                 <!-- Formulario de inicio de sesión -->
-                <div class="form-group">
-                    <input type="text" class="form-control" id="username" placeholder="Ingrese su nombre de usuario"
-                        required>
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-control" id="password" placeholder="Ingrese su contraseña"
-                        required>
-                </div>
-                <div>
-                    <p><a class="link-opacity-100" href="#"
-                            style="color: rgb(0, 0, 0); margin-left: 33%; font-weight: bold;">¿Olvidaste
-                            tu contraseña?</a></p>
-                </div>
-                <div>
-                    <div>
-                        <button type="submit" class="btn btn-primary">Entrar</button>
-                    </div>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ login_form.as_p }}
+                    <button type="submit"  class="btn btn-primary">Iniciar Sesión</button>
+                  </form>
                     <p>
                         <a id="registerLink" class="link-opacity-100" href="#"
                             style="color: rgb(0, 0, 0); margin-left: 28%; font-weight: bold;">
@@ -184,23 +180,29 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Formulario de registro -->
-                <form action="/singup/" method="post" class="my-form">
-                    {% csrf_token %}
-                    {{form.as_p}}
-                    <div>
-                        <button type="submit" class="btn btn-primary">Registrarse</button>
-                    </div>
-                </form>
                 <div>
-                    <!-- Botón "Volver atrás" para regresar al formulario de inicio de sesión -->
-
+                    <!--- Botón "Volver atrás" para regresar al formulario de inicio de sesión -->
                     <p>
-                        <a id="backToLogin" style="margin-top: -10px; color: black;" class="link-back" href="#">
+                        <a id="backToLogin" style=" color: black;" class="link-back" href="#">
                             <!--Volver atrás-->
                         </a>
                     </p>
                 </div>
+                <!-- Error General -->
+                {% if error %}
+                <div class="alert alert-warning" role="alert" style="max-width:90%;">
+                    {{ error }}
+                </div>
+                {% endif %}
+                <!-- Formulario de registro -->
+                <form action="" method="post" class="my-form">
+                    {% csrf_token %}
+                    {{form_registro.as_p}}
+                    <div>
+                        <button type="submit" class="btn btn-primary" id="registerButton">Registrarse</button>
+                    </div>
+
+                </form>
             </div>
         </div>
     </div>
@@ -229,7 +231,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/modal.js' %}"></script>
-    <script src="{% static 'js/registro.js' %}"></script>
+
 
 </body>
 
