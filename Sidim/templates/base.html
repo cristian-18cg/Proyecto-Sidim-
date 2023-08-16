@@ -16,104 +16,26 @@
         <img src="{% static 'images/Sidim.png' %}" alt="Logo Sidim" class="logo-img" height="100">
     </a>
     <header>
-        <nav class="menu">
-            <ul>
-                <li><a href="#">Ofertas</a></li>
-                <li><a href="#">Cotizaciones</a></li>
-                <li><a href="#">Ayuda</a></li>
-                <li>
-                    <input type="text" placeholder=" Busca tu bebida preferida">
-                </li>
-                <div class="icon-container ">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                        class="bi bi-cart-fill" viewBox="0 0 16 16">
-                        <path
-                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                    </svg>
-                    {% if user.is_authenticated %}
-
-
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                        class="bi bi-bell-fill" viewBox="0 0 16 16">
-                        <path
-                            d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
-                    </svg>
-
-                    <a href="/cerrarsesion">Cerrar Sesion</a> <!-- Cierra sesion y muestra logo de campana  -->
-                    {% else %}
-
-                    <svg id="user-icon" xmls="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                        class="bi bi-person-circle" viewBox="0 0 16 16" data-bs-toggle="modal"
-                        data-bs-target="#registroModal">
-                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                        <path fill-rule="evenodd"
-                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                    </svg>
-                    <a href="/cerrarsesion">Cerrar Sesion</a>
-                    {% endif %}
-
-                </div>
-            </ul>
-        </nav>
-        <div class="menu-bar-wrapper">
-            <div class="menu-bar">
-                <ul class="submenu">
-                    <li class="inicio-item">
-                        <span class="text-light">
-                            <a href="home.html">
-                                <svg class="custom-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                    class="bi bi-house-door-fill" viewBox="0 0 16 16">
-                                    <path
-                                        d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
-                                </svg>
-                            </a>
-                        </span>
-
-                    </li>
-                    <li class="menu-item">
-
-                        <a href="vinos.html">Vinos</a>
-                        <ul class="subsumenu">
-                            <li><a href="../html/vinotinto.html">Vino tinto</a></li>
-                            <li><a href="../html/vinosblancos.html">Vino blanco</a></li>
-                            <li><a href="../html/vinosrosados.html">Vino rosado</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="licores.html">Licores</a>
-                        <ul class="subsumenu">
-                            <li><a href="#">Ron</a></li>
-                            <li><a href="#">Whiskey</a></li>
-                            <li><a href="#">Aguardiente</a></li>
-                        </ul>
-                    </li>
-
-                    <li><a href="#">Cervezas</a>
-                        <ul class="subsumenu">
-                            <li><a href="#">Cerveza rubia</a></li>
-                            <li><a href="#">Cerveza negra</a></li>
-                            <li><a href="#">Cerveza artesanal</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Bebidas </a>
-                        <ul class="subsumenu">
-                            <li><a href="#">Jugos naturales</a></li>
-                            <li><a href="#">Refrescos</a></li>
-                            <li><a href="#">Agua</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Gaseosas </a>
-                        <ul class="subsumenu">
-                            <li><a href="#">Coca-Cola</a></li>
-                            <li><a href="#">Pepsi</a></li>
-                            <li><a href="#">Fanta</a></li>
-                        </ul>
-                    </li>
-
-                </ul>
-            </div>
-            <div class="barra-horizontal"></div>
-        </div>
+        {% include 'navbar.html' %}
     </header>
+    <!-- Error General -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog modal-dialog-centered modal-md" style="top:-10%;">
+            <div class="modal-content">
+                <div class="bg-danger text-white"
+                    style="border-top-left-radius: 6px; border-top-right-radius: 6px; min-height: 3rem;">
+                    <h5 class="modal-title " id="errorModalLabel" style="margin-left: 45%; margin-top: 1%;">Error</h5>
+                </div>
+                <div class="modal-body">
+                    <p id="errorMessage" class="mb-0" style="margin-left: 20%;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <!-- Ventana modal login -->
@@ -126,14 +48,18 @@
                 </button>
             </div>
             <div class="modal-body">
-
-
                 <!-- Formulario de inicio de sesión -->
-                <form method="post">
+                <form method="post" action="{% url 'home' %}" name="login">
                     {% csrf_token %}
-                    {{ login_form.as_p }}
-                    <button type="submit"  class="btn btn-primary">Iniciar Sesión</button>
-                  </form>
+                    <label for="login-correo">Email</label>
+                    <input type="email" class="form-control" id="login-correo" name="correo"
+                        placeholder="Correo electrónico" required>
+                    <label for="login-password" style="padding-top:3% ;">Password</label>
+                    <input type="password" class="form-control" id="login-password" name="password" required>
+                    <button type="submit" class="btn btn-primary" name="action" value="login">Login</button>
+                </form>
+                <div>
+
                     <p>
                         <a id="registerLink" class="link-opacity-100" href="#"
                             style="color: rgb(0, 0, 0); margin-left: 28%; font-weight: bold;">
@@ -166,9 +92,9 @@
                     </svg>
                 </div>
             </div>
+
         </div>
     </div>
-
 
     <!-- Ventana modal registro -->
     <div class="modal-side" id="registerModal">
@@ -180,59 +106,64 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div>
-                    <!--- Botón "Volver atrás" para regresar al formulario de inicio de sesión -->
-                    <p>
-                        <a id="backToLogin" style=" color: black;" class="link-back" href="#">
-                            <!--Volver atrás-->
-                        </a>
-                    </p>
-                </div>
-                <!-- Error General -->
-                {% if error %}
-                <div class="alert alert-warning" role="alert" style="max-width:90%;">
-                    {{ error }}
-                </div>
-                {% endif %}
                 <!-- Formulario de registro -->
                 <form action="" method="post" class="my-form">
                     {% csrf_token %}
                     {{form_registro.as_p}}
-                    <div>
-                        <button type="submit" class="btn btn-primary" id="registerButton">Registrarse</button>
-                    </div>
 
+                    <button type="submit" class="btn btn-primary" name="action" value="register"
+                        id="registerButton">Registrarse</button>
                 </form>
+                <div>
+                    <p>
+                        <a id="backToLogin" style="margin-top: -10px; color: black;" class="link-back" href="#">Volver al inicio de sesión</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
     {% block content %}
 
     {% endblock %}
-
-
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/modal.js' %}"></script>
 
 
+    {% if registrado_mensaje %}
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Bienvenido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {{ registrado_mensaje }}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#successModal').modal('show');
+        });
+    </script>
+    {% endif %}
+    {% if error %}
+    <script>
+        // Muestra el modal y establece el mensaje de error
+        const errorMessageElement = document.getElementById('errorMessage');
+        errorMessageElement.textContent = "{{ error }}";
+        const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+        errorModal.show();
+    </script>
+    {% endif %}
 </body>
 
 </html>

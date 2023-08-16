@@ -1,22 +1,3 @@
-// Espera a que se cargue el documento
-/*document.addEventListener("DOMContentLoaded", function() {
-    // Obtén el elemento del logo
-    var logo = document.querySelector("user-icon");
-  
-    // Agrega un evento de clic al logo
-    logo.addEventListener("click", function() {
-      // Obtén el modal por su ID
-      var modal = document.getElementById("registroModal");
-  
-      // Activa el modal utilizando el método modal() de Bootstrap
-      // asegúrate de haber incluido los archivos JavaScript de Bootstrap en tu página
-      var bootstrapModal = new bootstrap.Modal(modal);
-      bootstrapModal.show();
-    });
-  });*/
-  
-
-
 
   $(document).ready(function () {
     // Mostrar ventana modal de inicio de sesión al hacer clic en el ícono de usuario
@@ -55,6 +36,15 @@
   
   
   
-  //evita que se cierre el modal si hay errores 
-  
+// Muestra el modal y establece el mensaje de error cuando sea necesario
+function showErrorModal(message) {
+  const errorMessageElement = document.getElementById('errorMessage');
+  errorMessageElement.textContent = message;
+  const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+  errorModal.show();
+}
+
+
+
+
   

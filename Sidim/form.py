@@ -1,4 +1,5 @@
 from django import forms
+from django.core.validators import MaxLengthValidator 
 from .models import Usuarios
 
 class UsuariosCreationForm(forms.ModelForm):
@@ -8,9 +9,9 @@ class UsuariosCreationForm(forms.ModelForm):
         model = Usuarios
         fields = ['nombre', 'apellido', 'idusuario','correo', 'telefono', 'direccion','password']
         labels = {
-            'nombre': 'Nombre',
-            'apellido': 'Apellido',
-            'idusuario': 'Documento',
+            'nombre': 'Nombres',
+            'apellido': 'Apellidos',
+            'idusuario': 'Documento de identificacion',
             'correo': 'Correo electrónico',
             'password': 'Contraseña',
             'telefono': 'Teléfono',
@@ -23,7 +24,7 @@ class UsuariosCreationForm(forms.ModelForm):
             'correo': forms.EmailInput(attrs={'class': 'form-control','placeholder': 'ejemplo@gmail.com'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control'}),
             'telefono': forms.TextInput(attrs={'class': 'form-control','placeholder': '3105891457'}),
-            'direccion': forms.TextInput(attrs={'class': 'form-control','placeholder': 'cra 102a # 132 -3 0'}),
+            'direccion': forms.TextInput(attrs={'class': 'form-control','placeholder': 'cra 102a# 132-30'}),
         }
     def clean_confirmar_password(self):
         password = self.cleaned_data.get('password')
@@ -40,7 +41,10 @@ class UsuariosCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['idusuario'].validators.append(MaxLengthValidator(limit_value=10, message='El número de documento debe tener máximo 10 dígitos.'))
+        self.fields['telefono'].validators.append(MaxLengthValidator(limit_value=10, message='El número de telefono debe tener máximo 10 dígitos.'))
 
 class LoginForm(forms.Form):
     correo = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
