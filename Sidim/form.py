@@ -43,7 +43,7 @@ class UsuariosCreationForm(forms.ModelForm):
         return user
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['idusuario'].validators.append(MaxLengthValidator(limit_value=10, message='El número de documento debe tener máximo 10 dígitos.'))
+
         self.fields['telefono'].validators.append(MaxLengthValidator(limit_value=10, message='El número de telefono debe tener máximo 10 dígitos.'))
 
 class LoginForm(forms.Form):
