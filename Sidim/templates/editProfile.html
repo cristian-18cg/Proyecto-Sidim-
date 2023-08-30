@@ -1,0 +1,81 @@
+<h1>Mi Perfil</h1>
+<form id="perfilForm" class="form" method="post" action="{% url 'guardar_perfil' %}">
+    {% csrf_token %}
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="email" value="{{ user_data.correo }}" >Correo electrónico</label>
+            <input type="email" id="email" name="email" value="{{ user_data.correo }}" class="form-control nomodify" readonly>
+        </div>
+        <div class="col-md-6">
+            <label for="idusuario">Documento de identificacion</label>
+            <input type="text" id="idusuario" name="idusuario" value="{{ user_data.idusuario }}" class="form-control"
+                readonly>
+        </div>
+    </div> 
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="first_name" value="{{ user_data.nombre }}" class="form-control"
+                readonly>
+        </div>
+        <div class="col-md-6">
+            <label for="apellido">Apellido</label>
+            <input type="text" id="apellido" name="last_name" value="{{ user_data.apellido }}" class="form-control"
+                readonly>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label for="telefono">Teléfono</label>
+            <input type="text" id="telefono" name="telefono" value="{{ user_data.telefono }}" class="form-control"
+                readonly>
+        </div>
+        <div class="col-md-6">
+            <label for="direccion">Dirección</label>
+            <input type="text" id="direccion" name="direccion" value="{{ user_data.direccion }}" class="form-control"
+                readonly>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <button id="editarBtn" type="button" class="btn btn-primary btn-sm">Editar</button>
+        </div>
+        <div class="col-md-3">
+            <button id="guardarBtn" type="submit" class="btn btn-primary btn-sm" style="display:none;">Guardar</button>
+        </div>
+        <div class="col-md-3">
+            <button id="cancelarBtn" type="button" class="btn btn-secondary btn-sm"
+                style="display:none;">Cancelar</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    const editarBtn = document.getElementById('editarBtn');
+    const guardarBtn = document.getElementById('guardarBtn');
+    const cancelarBtn = document.getElementById('cancelarBtn');
+    const perfilForm = document.getElementById('perfilForm');
+    const inputs = perfilForm.querySelectorAll('input:not([name="email"]):not([name="idusuario"])'); // Excluir correo y ID
+
+    editarBtn.addEventListener('click', () => {
+        editarBtn.style.display = 'none';
+        guardarBtn.style.display = 'block';
+        cancelarBtn.style.display = 'block';
+
+        inputs.forEach(input => {
+            input.removeAttribute('readonly');
+        });
+    });
+
+    cancelarBtn.addEventListener('click', () => {
+        guardarBtn.style.display = 'none';
+        cancelarBtn.style.display = 'none';
+        editarBtn.style.display = 'block';
+
+        inputs.forEach(input => {
+            input.setAttribute('readonly', true);
+        });
+    });
+</script>

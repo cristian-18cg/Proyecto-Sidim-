@@ -1,0 +1,113 @@
+<div class="container-fluid px-0" style="width: 90%;">
+    <h1>Productos</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 10%;">ID Producto</th>
+                <th style="width: 20%;">Nombre</th>
+                <th style="width: 20%;">Categoría</th>
+                <th style="width: 40%;">Descripción</th>
+                <th style="width: 10%;">Precio</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for producto in productos %}
+            <tr>
+                <td>{{ producto.idProducto }}</td>
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.categoria }}</td>
+                <td>{{ producto.descripcion }}</td>
+                <td>{{ producto.precio }}</td>
+                <td>
+                    <!-- Botón para abrir el modal "Editar Producto" -->
+                    <a href="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd"
+                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                        </svg>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Botón para abrir el modal "Nuevo Producto" -->
+    <button id="nuevoProductoBtn" type="button" class="btn btn-primary" data-toggle="modal"
+        data-target="#nuevoProductoModal">
+        Nuevo Producto
+    </button>
+
+
+    <!-- Modal para nuevo producto -->
+    <div class="modal fade" id="nuevoProductoModal" tabindex="-1" role="dialog"
+        aria-labelledby="nuevoProductoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Contenido del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="nuevoProductoModalLabel">Nuevo Producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'crear_producto' %}" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <!-- Campos del formulario para crear un nuevo producto -->
+                        <div class="form-group">
+                            <label for="nombreProducto">Nombre Producto</label>
+                            <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="precioProducto">Precio</label>
+                            <input type="number" class="form-control" id="precioProducto" name="precioProducto"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="categoriaProducto">Categoría</label>
+                            <select class="form-control" id="categoriaProducto" name="categoriaProducto" required>
+                                <option value="" selected disabled>Seleccione una categoría</option>
+                                {% for categoria in categorias %}
+                                <option value="{{ categoria.idCategoria }}">{{ categoria.Nombre }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcionProducto">Descripción</label>
+                            <textarea class="form-control" id="descripcionProducto"
+                                name="descripcionProducto"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="imagenProducto">Imagen</label>
+                            <input type="file" class="form-control-file" id="imagenProducto" name="imagenProducto" accept=".jpg, .jpeg, .png, image/jpeg, image/png">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Crear Producto</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    // Función para abrir el modal de nueva categoría
+    $(document).ready(function () {
+        $('#nuevoProductoBtn').click(function () {
+            $('#nuevoProductoModal').modal('show');
+        });
+
+        // Cerrar el modal al hacer clic en el botón "Cancelar"
+        $('.cancelbutton').click(function () {
+            $('#nuevoProductoModal').modal('hide');
+        });
+    });
+</script>

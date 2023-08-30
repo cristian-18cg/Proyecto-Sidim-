@@ -8,11 +8,12 @@
     <title>{% block title %}SIDIM{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/card.css' %}">
     <script src="{% static 'js/code.jquery.com_jquery-3.7.0.min.js' %}"></script>
 </head>
 
 <body>
-    <a href="" class="Logo">
+    <a href="{% url 'home' %}" class="Logo">
         <img src="{% static 'images/Sidim.png' %}" alt="Logo Sidim" class="logo-img" height="100">
     </a>
     <header>

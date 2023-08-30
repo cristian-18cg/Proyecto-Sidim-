@@ -1,0 +1,37 @@
+<div class="d-flex" id="wrapper">
+    <!-- Menú Lateral -->
+    <div class="col-md-12" id="sidebar-wrapper">
+        <h1>Menú</h1>
+        <div class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action text-dark"
+                onclick="mostrarFormularioPerfil()">Editar Perfil</a>
+            <a href="#" class="list-group-item list-group-item-action text-dark"
+                onclick="mostrarHistorial()">Historial de Pedidos</a>
+            <a href="#" class="list-group-item list-group-item-action text-dark"
+                onclick="mostrarCambiarContrasena()">Cambiar Contraseña</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function mostrarFormularioPerfil() {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('perfil').style.display = 'block';
+    }
+
+    function mostrarHistorial() {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('historico').style.display = 'block';
+    }
+
+    function mostrarCambiarContrasena() {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('cambiar-contrasena').style.display = 'block';
+    }
+</script>

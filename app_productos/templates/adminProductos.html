@@ -1,0 +1,28 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <!-- Espacio para elementos adicionales -->
+        {% include 'menuProductos.html' %}
+    </div>
+    <div class="col-md-9">
+        <div id="productosRegistrados" class="content-section">
+            <!-- Productos Registrados -->
+            {% include 'productosRegistrados.html' %}
+        </div>
+
+        <div id="categorias" class="content-section" style="display: none;">
+            <!-- Categorias -->
+            {% include 'categoriasRegistradas.html' %}
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

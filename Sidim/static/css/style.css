@@ -36,7 +36,7 @@ nav.menu ul {
 }
 
 .container {
-  margin-top: 0%;
+  margin-top:10%;
   margin-bottom: 10%;
   display: flex;
   flex-direction: column;
@@ -251,12 +251,9 @@ nav.menu ul {
   color: #fff;
   text-decoration: none;
   font-size: 18px;
-
-
 }
 
 .menu-bar li {
-
   position: relative;
 }
 
@@ -268,7 +265,6 @@ nav.menu ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-
 }
 
 .menu-bar-wrapper {
@@ -276,8 +272,6 @@ nav.menu ul {
   justify-content: center;
   align-items: center;
 }
-
-
 
 body {
   margin: 0;
@@ -309,7 +303,6 @@ footer {
   display: flex;
   cursor: pointer;
   gap: 10px;
-
 }
 
 .social-media-icons li {
@@ -319,8 +312,6 @@ footer {
 .submenu {
   position: absolute;
   z-index: 1;
-
-
 }
 
 .submenu>li>a:after {
@@ -337,7 +328,6 @@ footer {
   padding: 0;
   margin-top: -59px;
   /* opacity: 0.85; */
-
 }
 
 .submenu>li>ul>li {
@@ -347,7 +337,6 @@ footer {
 .submenu>li:hover>ul {
   display: block;
   text-align: center;
-
 }
 
 .submenu li a {
@@ -366,28 +355,21 @@ footer {
   position: relative;
   margin: 20px;
   right: 90px;
-
-
-
 }
 
 .subsumenu li:hover {
   background-color: #9b9797;
   border-radius: 8px;
-
 }
 
 .table {
   border-spacing: 0;
   margin-top: 1rem;
-
-
 }
 
 .table_fotter {
   margin-top: 1rem;
   padding: 0 30px 20px;
-
 }
 
 .table_header {
@@ -401,28 +383,21 @@ footer {
   padding: 20px;
   text-align: center;
   border-bottom: 1px solid #bdbdbd;
-
 }
 
 .th {
   padding: 10px;
-
 }
 
 .thead {
   background-color: gray;
   font-size: 20px;
-
   height: 60px;
-
-
 }
 
 .tr {
   text-align: center;
   font-size: 18px;
-
-
 }
 
 @media (max-width:700px) {
@@ -446,15 +421,12 @@ footer {
   overflow-y: auto;
   z-index: 1050;
   transition: right 0.3s ease-in-out;
- 
 }
 
 .modal-side.open {
   right: 0;
   width: 40%;
-  min-height: 100%;
-  
-  
+  min-height: 100%;  
 }
 
 .modal-side .modal-content {
@@ -463,7 +435,6 @@ footer {
   border: none;
   border-radius: 10px;
   background-color: #9b9797;
-  
 }
 
 .modal-body .btn {
@@ -500,26 +471,24 @@ footer {
 .btn{
   width: 90%;
   margin: 20px 10px 30px 10px ;
-} 
+}
+
 .form-control{
   width: 90%;
   text-align: left;
   border-radius: 10px;
   height: 50px;
 }
+
 h2{
   margin-left: 40%;
   color: #000000;
 }
+
 .modal-header{
   border: none;
   margin-top: 30px;
-  
 }
-
-
-
-
 
 .subscribe-box {
   background-color: #f8f8f8;
@@ -536,21 +505,16 @@ h2{
   background-position: center;
 }
 
-
-
-
 .subscribe-box form {
   max-width: 300px;
   margin: 0 auto;
   margin-right: 10%;
-  
 }
 
 .subscribe-box .form-group {
   margin-top: -735%;
   margin-left: -100%;
   padding-top: 20px;
-  
 }
 
 .subscribe-box .btn {
@@ -561,25 +525,22 @@ h2{
   height: 60px;
   margin-top: -135px;
 }
+
 .form-check-label {
   color: #000000;
   margin-top:-90% ;
-
- 
-  
 }
+
 .form-check{
   margin-left: -200%;
   margin-top: -15px;
 }
-
 
 /* Estilo para el carrusel */
 #carouselExample {
   width: 100%;
   overflow: hidden;
 }
-
 
 /* Estilo para las imágenes dentro del carrusel */
 #carouselExample .carousel-item img {
@@ -594,13 +555,13 @@ h2{
   object-fit: cover;
 }
 
-
 .icon-facebook{
   margin-left: 25%;
   margin-top: -21%;
   background-color:  #ffffff;
   color:  #3b5998;
 }
+
 .google {
   margin-left: 25%;
   margin-top: -21%;
@@ -611,7 +572,20 @@ h2{
 .my-input-class{
   padding-top: 4%;
 }
+
 .close2{
   margin-left: 2%;
   width:3%;
+}
+
+.nomodify[readonly] {
+  background-color: #f0f0f0; /* Cambia el fondo a un color gris */
+  border: 1px solid #ccc; /* Agrega un borde gris */
+  cursor: not-allowed; /* Cambia el cursor a no permitido */
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #770000;
+  border-color: #770000;
+  color: #fff; /* Color del texto en el elemento activo */
 }

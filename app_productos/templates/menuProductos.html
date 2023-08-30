@@ -1,0 +1,28 @@
+<div class="d-flex" id="wrapper">
+    <!-- Menú Lateral -->
+    <div class="col-md-12" id="sidebar-wrapper">
+        <h1>Administrar</h1>
+        <div class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action text-dark"
+                onclick="mostrarProductos()">Productos Registrados</a>
+            <a href="#" class="list-group-item list-group-item-action text-dark"
+                onclick="mostrarCategorias()">Categorías</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function mostrarProductos() {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('productosRegistrados').style.display = 'block';
+    }
+
+    function mostrarCategorias() {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('categorias').style.display = 'block';
+    }
+</script>

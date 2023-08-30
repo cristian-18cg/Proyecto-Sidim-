@@ -1,0 +1,62 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <!-- Espacio para elementos adicionales -->
+        {% include 'profileOptions.html' %}
+    </div>
+    <div class="col-md-9">
+        <div id="perfil" class="content-section">
+            <!-- Contenido del Perfil del usuario -->
+            {% include 'editProfile.html' %}
+        </div>
+
+        <div id="historico" class="content-section" style="display: none;">
+            <!-- Contenido de Historial de Pedidos -->
+            {% include 'historialPedidos.html' %}
+        </div>
+
+        <div id="cambiar-contrasena" class="content-section" style="display: none;">
+            <!-- Contenido de Cambiar Contraseña -->
+            {% include 'updatePassword.html' %}
+        </div>
+
+        <div class="modal fade" id="updatePassword" tabindex="-1" aria-labelledby="updatePassword" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="modalMessageText"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+<script>
+    $(document).ready(function () {
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                $('#modalMessageText').text('{{ message }}');
+            {% endif %}
+            {% if message.tags == 'error' %}
+                $('#modalMessageText').text('{{ message }}');
+            {% endif %}
+        {% endfor %}
+
+        $('#updatePassword').modal('show');
+    });
+</script>
+{% endif %}
+{% endblock %}

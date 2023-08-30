@@ -2,6 +2,9 @@ from django import forms
 from django.core.validators import MaxLengthValidator 
 from .models import Usuarios
 
+
+
+#Formulario para el registro
 class UsuariosCreationForm(forms.ModelForm):
     confirmar_password = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
@@ -45,7 +48,7 @@ class UsuariosCreationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields['telefono'].validators.append(MaxLengthValidator(limit_value=10, message='El número de telefono debe tener máximo 10 dígitos.'))
-
+#Formulario para el login
 class LoginForm(forms.Form):
     correo = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))     

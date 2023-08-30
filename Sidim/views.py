@@ -1,11 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models  import User
-from django.contrib.auth import login, logout,authenticate
+from django.contrib.auth import login, logout,authenticate, update_session_auth_hash
 from django.db import IntegrityError
 from .form import UsuariosCreationForm, LoginForm
 from .models import Usuarios
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -42,9 +44,6 @@ def home(request):
 
    return render(request, 'home.html', {'form_registro': form_registro})
 
-
-
-
 def cerrarsesion(request):
   logout(request)
   return redirect('home')
@@ -62,5 +61,67 @@ def iniciarsesion(request):
  else:
         form = LoginForm()
  return render(request, 'home.html', {'form': form})
+
+@login_required 
+def perfil(request):
+    # Obtén el usuario logeado actualmente
+    logged_in_user = request.user
+ 
+    # Usa el correo electrónico del usuario logeado para obtener sus datos
+    user_data = get_object_or_404(Usuarios, correo=logged_in_user.correo)
+
+    context = {
+        'user_data': user_data
+    }
+    return render(request, 'profile.html', context)
+@login_required 
+def guardar_perfil(request):
+    if request.method == 'POST':
+        logged_in_user = request.user
+        user_data = get_object_or_404(Usuarios, correo=logged_in_user.correo)
+
+        # Obtén los datos enviados desde el formulario
+        nombre = request.POST.get('first_name')
+        apellido = request.POST.get('last_name')
+        telefono = request.POST.get('telefono')
+        direccion = request.POST.get('direccion')
+
+        # Compara los datos con los datos actuales en la base de datos
+        if nombre != user_data.nombre:
+            user_data.nombre = nombre
+        if apellido != user_data.apellido:
+            user_data.apellido = apellido
+        if telefono != user_data.telefono:
+            user_data.telefono = telefono
+        if direccion != user_data.direccion:
+            user_data.direccion = direccion
+
+
+        user_data.save()
+
+        return redirect('perfil')
+
+    return redirect('perfil')
+@login_required 
+def cambiar_contrasena(request):
+    if request.method == 'POST':
+        contrasena_actual = request.POST.get('contrasena_actual')
+        nueva_contrasena = request.POST.get('nueva_contrasena')
+        confirmar_contrasena = request.POST.get('confirmar_contrasena')
+
+        if request.user.check_password(contrasena_actual) and nueva_contrasena == confirmar_contrasena:
+            request.user.set_password(nueva_contrasena)
+            request.user.save()
+
+            # Actualizar la sesión de autenticación
+            update_session_auth_hash(request, request.user)
+
+            messages.success(request, 'La contraseña ha sido cambiada exitosamente.')
+        else:
+            messages.error(request, 'Hubo un error al cambiar la contraseña. Asegúrate de ingresar la contraseña actual correctamente y de que las nuevas contraseñas coincidan.')
+
+    return render(request, 'profile.html')
+
+
 
   

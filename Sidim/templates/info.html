@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% if messages %}
+    <div id="updatePassword" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Cambio de Contraseña Exitoso</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ messages|first }}</p>
+                </div>
+                <div class="modal-footer">
+                    <!-- No se necesita el botón "Cerrar", el modal se cerrará al hacer clic fuera de él -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cierra la sesión al cerrar el modal
+        $('#updatePassword').on('hidden.bs.modal', function () {
+            window.location.href = "{% url 'logout' %}";
+        });
+
+        // Muestra el modal automáticamente al cargar la página si hay mensajes
+        $(document).ready(function () {
+            $("#updatePassword").modal('show');
+        });
+    </script>
+{% endif %}
