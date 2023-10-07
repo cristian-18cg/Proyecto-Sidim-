@@ -9,13 +9,11 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/card.css' %}">
+    <link rel="stylesheet" href="{% static 'css/menu.css' %}">
     <script src="{% static 'js/code.jquery.com_jquery-3.7.0.min.js' %}"></script>
 </head>
 
 <body>
-    <a href="{% url 'home' %}" class="Logo">
-        <img src="{% static 'images/Sidim.png' %}" alt="Logo Sidim" class="logo-img" height="100">
-    </a>
     <header>
         {% include 'navbar.html' %}
     </header>
@@ -42,13 +40,16 @@
     <!-- Ventana modal login -->
     <div class="modal-side" id="loginModal">
         <div class="modal-content">
-            <h2 class="modal-login" style="margin-top: 50px; margin-left: 70px;">Iniciar sesión</h2>
-            <div class="modal-header">
-                <button type="button" class="close close2" data-dismiss="modal" style="margin-top: -140px;">
+           
+            
+            <button type="button" class="boton close" data-dismiss="modal" style="   background-color: #bdbdbda7;border-color: #0000003b;border-radius: 20%!important;max-width:1.5rem;">
                     <span aria-hidden="true">&times;</span>
-                </button>
+            </button>
+           
+            <div class="modal-header">     
+             <h2 class="modal-login" style="padding-right:30%">Iniciar sesión</h2>
             </div>
-            <div class="modal-body">
+            <div class="modal-body ">
                 <!-- Formulario de inicio de sesión -->
                 <form method="post" action="{% url 'home' %}" name="login">
                     {% csrf_token %}
@@ -57,41 +58,26 @@
                         placeholder="Correo electrónico" required>
                     <label for="login-password" style="padding-top:3% ;">Password</label>
                     <input type="password" class="form-control" id="login-password" name="password" required>
-                    <button type="submit" class="btn btn-primary" name="action" value="login">Login</button>
+                    <button type="submit" class="btn btn-primary" name="action" value="login"style="margin-left:20%!important">Login</button>
                 </form>
                 <div>
 
                     <p>
                         <a id="registerLink" class="link-opacity-100" href="#"
-                            style="color: rgb(0, 0, 0); margin-left: 28%; font-weight: bold;">
+                            style="color: rgb(0, 0, 0); margin-left: 5rem; font-weight: bold;">
                             ¿No tienes cuenta? Regístrate
                         </a>
                     </p>
+                     <p>
+                        <a id="olvidocontra" class="link-opacity-100" href="{% url 'reset_password' %}"
+                            style="color: rgb(0, 0, 0); margin-left: 5rem; font-weight: bold;">
+                            ¿Se te olvido la contraseña?
+                        </a>
+                    </p>
 
-                    <h2 class="modal-login"
-                        style="margin-top: 80px;margin-left: 10px;font-size: 18px;color: black;text-align: center;">
-                        Selecciona
-                        una opcion para ingresar</h2>
 
-                    <button type="button" class="btn btn-primary"
-                        style="background-color: #ffffff; color: rgb(0, 0, 0); margin-top: 20px;color: #3b5998; ">Entrar
-                        con Facebook</button>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
-                        class="icon-facebook bi-facebook" viewBox="0 0 16 16">
-                        <path
-                            d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
-                    </svg>
                 </div>
-                <div>
-                    <button type="submit" class="btn btn-primary"
-                        style="background-color: #ffffff; color: rgb(0, 0, 0);margin-top: -35px;color:#be0101;">Entrar
-                        con Google</button>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
-                        class="google bi-google" viewBox="0 0 16 16">
-                        <path
-                            d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
-                    </svg>
-                </div>
+             
             </div>
 
         </div>
@@ -100,20 +86,21 @@
     <!-- Ventana modal registro -->
     <div class="modal-side" id="registerModal">
         <div class="modal-content">
-            <h2 class="modal-login" style="margin-top: 50px; margin-left: 70px;">Registro</h2>
-            <div class="modal-header">
-                <button type="button" class="close close2" data-dismiss="modal" style="margin-top: -140px;">
+            <button type="button" class="close" style=" background-color: #bdbdbda7;border-color: #0000003b;border-radius: 20%!important;max-width:1.5rem;" data-dismiss="modal" >
                     <span aria-hidden="true">&times;</span>
-                </button>
+            </button>
+            <h2 class="modal-login" style=" margin-left: 30%;">Registro</h2>
+            <div class="modal-header">
+                
             </div>
-            <div class="modal-body">
+            <div class="modal-body ">
                 <!-- Formulario de registro -->
-                <form action="" method="post" class="my-form">
+                <form action="" method="post" class="my-form ">
                     {% csrf_token %}
                     {{form_registro.as_p}}
 
-                    <button type="submit" class="btn btn-primary" name="action" value="register"
-                        id="registerButton">Registrarse</button>
+                    <button type="submit" class="btn btn-primary " name="action" value="register"
+                        id="registerButton" style="margin-left:20%!important">Registrarse</button>
                 </form>
                 <div>
                     <p>
@@ -136,11 +123,11 @@
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="max">
                     <h5 class="modal-title" id="successModalLabel">Bienvenido</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body2">
                     {{ registrado_mensaje }}
                 </div>
                 <div class="modal-footer">

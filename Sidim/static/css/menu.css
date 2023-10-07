@@ -1,0 +1,277 @@
+
+
+
+/*Estilos del boton de busqueda*/
+.btn-search {
+    background-color: #770000;
+    color: white;
+
+
+}
+
+.btn-search:hover {
+    border-color: aliceblue;
+    background-color: #770000;
+    color: azure
+}
+ /*************************************/
+
+
+
+
+
+
+
+
+/*Estilos del Suscribe*/
+
+
+.btn-suscribe {
+    margin-left: -3rem;
+    background-color: #770000;
+    color: azure;
+
+}
+
+.btn-suscribe:hover {
+    background-color: #770000;
+    color: white;
+    border-color: aliceblue;
+
+
+}
+
+/* Cambiar el estilo del checkbox cuando está marcado */
+.form-check-input[type="checkbox"] {
+    /* Establece el color del borde cuando el checkbox está seleccionado */
+    border-color: #770000;
+    /* Quita el sombreado azul alrededor del borde */
+    outline: none;
+    box-shadow: none;
+}
+
+.form-check-input[type="checkbox"]:checked {
+    /* Establece el color de fondo del checkbox cuando está seleccionado */
+    background-color: #770000;
+}
+
+/* Cambiar el estilo del checkbox en estado hover */
+.form-check-input:hover {
+    border-color: #ffffff;
+    /* Cambia el color del borde en estado hover */
+    box-shadow: none;
+}
+
+ /****************************************************************************************/
+
+
+
+/*Estilos de la casa de inicio*/
+.custom-icon {
+    color: #ffffff;
+    width: 10%;
+    height: 10%;
+    margin-top: 0%;
+    margin-right: 13%;
+
+}
+
+.custom-icon:hover {
+    color: #ffffff;
+}
+
+
+/*Estos son los estilos del menu*/
+.menu-bar {
+
+    background-color: #770000;
+    display: flex;
+    width: 100%;
+    height: 3rem;
+
+}
+
+.menu-bar a {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+}
+
+.menu-bar li {
+    position: relative;
+    padding-left: 3%;
+
+}
+
+.menu-bar li:hover ul {
+    display: block;
+}
+
+.menu-bar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+
+}
+
+.menu-bar-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.menu-bar>ul.submenu>li>ul.subsumenu>li>a::after {
+    display: none;
+}
+
+
+
+
+ /*************************************/
+
+/*Estilos del submenu y subsumenu*/
+
+
+.submenu li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 120%;
+    margin-bottom: 15%;
+    text-align: center;
+    padding: 5px;
+    opacity: 500%;
+   
+    
+}
+
+.submenu>li {
+    display: inline-block;
+    position: relative;
+    margin: 0px;
+    right: 100px;
+}
+
+.submenu>li:hover>ul {
+    display: block;
+    text-align: center;
+
+}
+
+
+
+.submenu>li>ul {
+    display: none;
+    position: absolute;
+    right: 10%;
+    border-radius: 3%;
+    background-color: #770000;
+    width: 100%;
+    height: 15rem;
+
+}
+
+.submenu>li>ul>li {
+    display: block;
+}
+
+
+
+.subsumenu li:hover {
+    background-color: #9b9797;
+    border-radius: 8px;
+
+
+}
+
+.subsumenu>li>a {
+    color: rgb(255, 255, 255);
+    margin-right: 70%;
+}
+/*************************************/
+
+
+/*Estilos del footer*/
+.footer-bottom {
+
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    margin-top: 2rem;
+}
+
+.footer-column {
+    width: 77%;
+
+}
+
+.footer-column h3 {
+    font-size: 18px;
+    margin-top: 5%;
+    margin-right: 90%;
+}
+
+.footer-column p {
+    margin-bottom: 2%;
+
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+
+}
+
+.footer-column ul li {
+    margin-bottom: 5px;
+
+}
+
+.footer-column ul li a {
+    color: #333;
+    text-decoration: none;
+
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-right: 1%;
+    margin-top: 50px;
+
+
+}
+
+.social-media-icons {
+    display: flex;
+    cursor: pointer;
+    gap: 10px;
+
+}
+
+.social-media-icons li {
+    margin-right: 10px;
+}
+
+.footer {
+    background-color: #f2f2f2;
+    padding: 20px 0;
+}
+h3 {
+    font-size: 16px;
+    margin-top: 150%;
+
+    margin-right: 100%;
+}
+
+
+ /*************************************/
+
+
+.buscador{
+    margin-top: 10%!important;
+    min-width: auto;
+}

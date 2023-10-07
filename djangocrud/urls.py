@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('Sidim.urls')),
     path('', include('app_productos.urls')),
+    path('', include('app_inventario.urls')),
 ] 
 

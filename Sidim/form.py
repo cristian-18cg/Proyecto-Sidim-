@@ -1,8 +1,16 @@
 from django import forms
 from django.core.validators import MaxLengthValidator 
 from .models import Usuarios
+from django.contrib.auth.forms import PasswordResetForm
 
 
+
+class CustomPasswordResetForm(PasswordResetForm):
+    correo = forms.EmailField(
+        label="Correo",
+        max_length=254,
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'})
+    )
 
 #Formulario para el registro
 class UsuariosCreationForm(forms.ModelForm):

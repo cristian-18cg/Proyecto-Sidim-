@@ -1,0 +1,34 @@
+
+<div class="container-fluid px-0" style="width: 90%;">
+    <h1>Transacciones</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 20%;">Subtipo</th>
+                <th style="width: 20%;">Fecha de Ingreso</th>
+                <th style="width: 20%;">Proveedor</th>
+                <th style="width: 20%;">Valor Total</th>
+                <th style="width: 10%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaccion in transacciones %}
+            <tr>
+                <td>{{ transaccion.subtipo.nombreSubtipo }}</td>
+                <td>{{ transaccion.fecha }}</td>
+                <td>{{ transaccion.idProveedor.nombreProveedor }}</td>
+                <td>{{ transaccion.valorTotal }}</td>
+                <td>
+                    <!-- Botón para abrir el modal "Editar Transacción" -->
+                    <a href="#" class="editar-transaccion" data-toggle="modal" data-target="#editarTransaccionModal"
+                        data-id="{{ transaccion.idTransaccion }}" data-subtipo="{{ transaccion.subtipo.idSubtipo }}"
+                        data-fecha="{{ transaccion.fecha }}" data-proveedor="{{ transaccion.idProveedor.idProveedor }}"
+                        data-valor="{{ transaccion.valorTotal }}">
+                        <!-- Agrega aquí el icono de edición, si lo deseas -->
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -20,9 +20,12 @@
                 <td>{{ producto.precio }}</td>
                 <td>
                     <!-- Botón para abrir el modal "Editar Producto" -->
-                    <a href="">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <a href="#" class="editar-producto" data-toggle="modal" data-target="#editarProductoModal"
+                        data-id="{{ producto.idProducto }}" data-nombre="{{ producto.nombre }}"
+                        data-categoria="{{ producto.categoria }}" data-descripcion="{{ producto.descripcion }}"
+                        data-precio="{{ producto.precio }}">
+                        <svg id="editProduct" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path
                                 d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                             <path fill-rule="evenodd"
@@ -58,36 +61,44 @@
                     <form method="post" action="{% url 'crear_producto' %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         <!-- Campos del formulario para crear un nuevo producto -->
-                        <div class="form-group">
-                            <label for="nombreProducto">Nombre Producto</label>
-                            <input type="text" class="form-control" id="nombreProducto" name="nombreProducto" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="precioProducto">Precio</label>
-                            <input type="number" class="form-control" id="precioProducto" name="precioProducto"
-                                required>
-                        </div>
-                        <div class="form-group">
-                            <label for="categoriaProducto">Categoría</label>
-                            <select class="form-control" id="categoriaProducto" name="categoriaProducto" required>
-                                <option value="" selected disabled>Seleccione una categoría</option>
-                                {% for categoria in categorias %}
-                                <option value="{{ categoria.idCategoria }}">{{ categoria.Nombre }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="descripcionProducto">Descripción</label>
-                            <textarea class="form-control" id="descripcionProducto"
-                                name="descripcionProducto"></textarea>
-                        </div>
+                        {% include 'formProducto.html' %}
                         <div class="form-group">
                             <label for="imagenProducto">Imagen</label>
                             <input type="file" class="form-control-file" id="imagenProducto" name="imagenProducto" accept=".jpg, .jpeg, .png, image/jpeg, image/png">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button id="cancel_newProduct" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                             <button type="submit" class="btn btn-primary">Crear Producto</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar producto -->
+    <div class="modal fade" id="editarProductoModal" tabindex="-1" role="dialog"
+        aria-labelledby="editarProductoModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Contenido del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarProductoModalLabel">Editar Producto</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'editar_producto' %}">
+                        {% csrf_token %}
+                        <!-- Campo oculto para el ID del producto -->
+                        <input type="hidden" name="idProducto" id="idProducto">
+                        <!-- Campos del formulario para crear un nuevo producto -->
+                        {% include 'formProducto.html' %}
+
+                        <div class="modal-footer">
+                            <button id="cancel_editProduct" type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                         </div>
                     </form>
                 </div>
@@ -99,15 +110,41 @@
 </div>
 
 <script>
-    // Función para abrir el modal de nueva categoría
+
     $(document).ready(function () {
+        // Función para abrir el modal de nueva categoría
         $('#nuevoProductoBtn').click(function () {
             $('#nuevoProductoModal').modal('show');
         });
 
         // Cerrar el modal al hacer clic en el botón "Cancelar"
-        $('.cancelbutton').click(function () {
+        $('#cancel_newProduct').click(function () {
             $('#nuevoProductoModal').modal('hide');
+        });
+
+
+        // Función para cargar los datos del producto en el modal de edición
+        $('.editar-producto').click(function () {
+            var id = $(this).data('id');
+            var nombre = $(this).data('nombre');
+            var categoria = $(this).data('categoria');
+            var descripcion = $(this).data('descripcion');
+            var precio = $(this).data('precio');
+
+            // Llenar los campos del modal con los datos del producto
+            $('#editarProductoModal').find('#idProducto').val(id);
+            $('#editarProductoModal').find('#nombreProducto').val(nombre);
+            $('#editarProductoModal').find('#categoriaProducto').val(categoria);
+            $('#editarProductoModal').find('#descripcionProducto').val(descripcion);
+            $('#editarProductoModal').find('#precioProducto').val(precio);
+
+            // Mostrar el modal
+            $('#editarProductoModal').modal('show');
+        });
+
+        // Cerrar el modal con el boton "Cancelar"
+        $('#cancel_editProduct').click(function () {
+            $('#editarProductoModal').modal('hide');
         });
     });
 </script>

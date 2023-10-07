@@ -1,0 +1,33 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+
+<div class="row mt-4">
+    <div class="col-md-3">
+        <!-- Espacio para elementos adicionales -->
+        {% include 'menuTransacciones.html' %}
+    </div>
+    <div class="col-md-9">
+        <div id="productosRegistrados" class="content-section">
+            <!-- Transacciones Registradas -->
+            {% include 'transaccionesRegistradas.html' %}
+        </div>
+
+        <div id="proveedoresRegistrados" class="content-section" style="display: none;">
+            <!-- Tabla de proveedores -->
+            {% include 'proveedores.html' %}
+        </div>
+
+        <div id="formularioRegistroCompra" class="content-section" style="display: none;">
+            <!-- Formulario para registrar compras a los proveedores -->
+            {% include 'formTransaccion.html' %}
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}

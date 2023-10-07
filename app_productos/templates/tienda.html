@@ -1,110 +1,91 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block title %}Tienda{% endblock %}
 {% block content %}
 
-<div class="container">
-    <div class="row card-container">
-          <!-- ifor que muestra los productos por medio de la vista -->
-        {% for producto in page %}
+<div class="container" style="min-width:95%">
+    <div class="row">
         <div class="col-md-3">
             <div class="card">
-                {% if producto.imagen_producto %}
-                <img src="{{ producto.imagen_producto.url }}" class="card-img-top" alt="{{ producto.nombre }}">
-                {% else %}
-                <!-- imagen predeterminada tapa sidim  -->
-                <img src="{% static 'images/TapaSidimNegro.png' %}" class="card-img-top" alt="Imagen Predeterminada">
-                {% endif %}
+                <div class="card-header">
+                    <h5 style="color:#770000!important">Filtrar por precio</h5>
+                </div>
                 <div class="card-body">
-                    <h5 class="card-title">${{ producto.precio }}</h5>
-                    <p class="card-text">{{ producto.nombre }}</p>
-                    <div class="card-footer">
-                        <button class="btn btn-danger btn-minus">-</button>
-                        <span class="quantity">0</span>
-                        <button class="btn btn-success btn-plus">+</button>
-                    </div>
-                    <a href="#" class="btn btn-primary">AGREGAR</a>
+                    <ul class="list-group">
+                        {% for precio in precios %}
+                            <li class="list-group-item">
+                                <a href="?min_price={{ precio.min }}&max_price={{ precio.max }}" style="color:black">
+                                    {{ precio.nombre }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>
-        {% endfor %}
+        <div class="col-md-9">
+            <div class="row card-container" style="padding-top:5%">
+                <!-- for que muestra los productos por medio de la vista -->
+                {% for producto in page %}
+                <div class="col-md-3">
+                    <div class="card">
+                        {% if producto.imagen_producto %}
+                        <img src="{{ producto.imagen_producto.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                        {% else %}
+                        <!-- imagen predeterminada tapa sidim  -->
+                        <img src="{% static 'images/TapaSidimNegro.png' %}" class="card-img-top" alt="Imagen Predeterminada">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">${{ producto.precio }}</h5>
+                            <p class="card-text">{{ producto.nombre }}</p>
+                            <div class="card-footer">
+                                <button class="btn btn-danger btn-minus">-</button>
+                                <span class="quantity">0</span>
+                                <button class="btn btn-success btn-plus">+</button>
+                            </div>
+                            <a href="#" class="btn btn-primary">AGREGAR</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paginación de Bootstrap -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" style="background-color: #9e0000;">
+                    {% if page.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1" aria-label="Primero">
+                            <span aria-hidden="true">1</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <span class="page-link">
+                            {{ page.number }}
+                            <span class="sr-only">(actual)</span>
+                        </span>
+                    </li>
+
+                    {% if page.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page.next_page_number }}" aria-label="Siguiente">
+                            <span aria-hidden="true">{{ page.next_page_number }}</span>
+                            <span class="sr-only"></span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page.paginator.num_pages }}" aria-label="Último">
+                            <span class="sr-only">Última pagina</span>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     </div>
-
-<div class="pagination">
-    <span class="step-links">
-        {% if page.has_previous %}
-            <a href="?page=1">&laquo; primero</a>
-            <a href="?page={{ page.previous_page_number }}">anterior</a>
-        {% endif %}
-
-        <span class="current-page">{{ page.number }}</span>
-
-        {% if page.has_next %}
-            <a href="?page={{ page.next_page_number }}">siguiente</a>
-            <a href="?page={{ page.paginator.num_pages }}">último &raquo;</a>
-        {% endif %}
-    </span>
-</div>
 </div>
 
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const cardContainers = document.querySelectorAll('.card-container');
-        const itemsPerPage = 6;
-        const pagination = document.querySelector('.pagination');
-
-        pagination.addEventListener('click', (event) => {
-            if (event.target.tagName === 'A') {
-                event.preventDefault();
-                const pageNumber = parseInt(event.target.textContent);
-
-                cardContainers.forEach(container => {
-                    container.style.display = 'none';
-                });
-
-                cardContainers[pageNumber - 1].style.display = 'flex';
-
-                // Opcional: Desplazarse al inicio del contenedor de tarjetas
-                cardContainers[pageNumber - 1].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const cards = document.querySelectorAll('.card-container .col-md-3');
-        const itemsPerPage = 6;
-        const pagination = document.querySelector('.pagination');
-
-        function showPage(pageNumber) {
-            const startIndex = (pageNumber - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-
-            cards.forEach((card, index) => {
-                if (index >= startIndex && index < endIndex) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        pagination.addEventListener('click', (event) => {
-            if (event.target.tagName === 'A') {
-                event.preventDefault();
-                const pageNumber = parseInt(event.target.textContent);
-                showPage(pageNumber);
-            }
-        });
-
-        // Mostrar la primera página al cargar la página
-        showPage(1);
-    });
-
-
-</script>
 {% endblock %}

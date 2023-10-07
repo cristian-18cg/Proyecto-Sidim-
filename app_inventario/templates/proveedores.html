@@ -1,0 +1,140 @@
+
+<div class="container-fluid px-0" style="width: 90%;">
+    <h1>Proveedores</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 20%;">Nombre</th>
+                <th style="width: 10%;">NIT</th>
+                <th style="width: 20%;">Correo Electrónico</th>                
+                <th style="width: 20%;">Teléfono</th>
+                <th style="width: 10%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proveedor in proveedores %}
+            <tr>
+                <td>{{ proveedor.nombreProveedor }}</td>
+                <td>{{ proveedor.idProveedor }}</td>
+                <td>{{ proveedor.emailProveedor }}</td>
+                <td>{{ proveedor.telefonoProveedor }}</td>
+                <td>
+                    <!-- Botón para abrir el modal "Editar Proveedor" -->
+                    <a href="#" class="editar-proveedor" data-toggle="modal" data-target="#editarProveedorModal"
+                        data-id="{{ proveedor.idProveedor}}" data-nombre="{{ proveedor.nombreProveedor }}"
+                        data-telefono="{{ proveedor.telefonoProveedor }}" data-correo="{{ proveedor.emailProveedor }}">
+                        <svg id="editProveedor" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                            fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path
+                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd"
+                                d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                        </svg>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Botón para abrir el modal "Nuevo Proveedor" -->
+    <button id="nuevoProveedorBtn" type="button" class="btn btn-primary" data-toggle="modal"
+        data-target="#nuevoProveedorModal">
+        Nuevo Proveedor
+    </button>
+
+    <!-- Modal para nuevo proveedor -->
+    <div class="modal fade" id="nuevoProveedorModal" tabindex="-1" role="dialog"
+        aria-labelledby="nuevoProveedorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Contenido del modal -->
+                <div class="modal-header " style="">
+                    <h5 class="modal-title" id="nuevoProveedorModalLabel">Nuevo Proveedor</h5>
+                    <button type="button" class="close" style=" background-color: #bdbdbda7;border-color: #0000003b;border-radius: 20%!important;max-width:1.5rem;" data-dismiss="modal" >
+                    <span aria-hidden="true">&times;</span>
+            </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'crear_proveedor' %}">
+                        {% csrf_token %}
+                        <!-- Campos del formulario para crear un nuevo proveedor -->
+                        {% include 'formProveedor.html' %}
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                            <button id="cancel_newProveedor" type="button" class="btn btn-secondary"
+                                data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary"style="">Crear Proveedor</button>
+                        </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar proveedor -->
+    <div class="modal fade" id="editarProveedorModal" tabindex="-1" role="dialog"
+        aria-labelledby="editarProveedorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Contenido del modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarProveedorModalLabel">Editar Proveedor</h5>
+                   <button type="button" class="close" style=" background-color: #bdbdbda7;border-color: #0000003b;border-radius: 20%!important;max-width:1.5rem;" data-dismiss="modal" >
+                    <span aria-hidden="true">&times;</span>
+            </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="{% url 'editar_proveedor' %}">
+                        {% csrf_token %}
+                        <!-- Campo oculto para el ID del proveedor -->
+                        <input type="hidden" name="idProveedor" id="idProveedor">
+                        <!-- Campos del formulario para editar el proveedor -->
+                        {% include 'formProveedor.html' %}
+                        <div class="modal-footer">
+                            <button id="cancel_editProveedor" type="button" class="btn btn-secondary"
+                                data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Función para abrir el modal de nuevo proveedor
+        $('#nuevoProveedorBtn').click(function () {
+            $('#nuevoProveedorModal').modal('show');
+        });
+
+        // Cerrar el modal al hacer clic en el botón "Cancelar"
+        $('#cancel_newProveedor').click(function () {
+            $('#nuevoProveedorModal').modal('hide');
+        });
+
+        // Función para cargar los datos del proveedor en el modal de edición
+        $('.editar-proveedor').click(function () {
+            var id = $(this).data('id');
+            var nombre = $(this).data('nombre');
+            var telefono = $(this).data('telefono');
+            var correo = $(this).data('correo');
+
+            // Llenar los campos del modal con los datos del proveedor
+            $('#editarProveedorModal').find('#nitProveedor').val(id);
+            $('#editarProveedorModal').find('#nombreProveedor').val(nombre);
+            $('#editarProveedorModal').find('#telefonoProveedor').val(telefono);
+            $('#editarProveedorModal').find('#correoProveedor').val(correo);
+
+            // Mostrar el modal
+            $('#editarProveedorModal').modal('show');
+        });
+
+        // Cerrar el modal con el boton "Cancelar"
+        $('#cancel_editProveedor').click(function () {
+            $('#editarProveedorModal').modal('hide');
+        });
+    });
+</script>

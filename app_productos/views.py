@@ -59,13 +59,59 @@ def crear_producto(request):
 
     return redirect('adminProductos')  # Redirigir en caso de que no sea un método POST
 
+def editar_producto(request):
+    if request.method == 'POST':
+        try:
+            id_producto = request.POST.get('idProducto')
+            nombre_producto = request.POST.get('nombreProducto')
+            id_categoria = request.POST.get('categoriaProducto')  # Obtén el ID de la categoría
+            descripcion_producto = request.POST.get('descripcionProducto')
+            precio_producto = request.POST.get('precioProducto')
+
+            # Busca la instancia de Producto por ID
+            producto = Producto.objects.get(idProducto=id_producto)
+
+            # Busca la instancia de CategoriaProducto por ID
+            categoria_producto = CategoriaProducto.objects.get(idCategoria=id_categoria)
+
+            # Actualiza los campos del producto
+            producto.nombre = nombre_producto
+            producto.categoria = categoria_producto  # Asigna la instancia de CategoriaProducto
+            producto.descripcion = descripcion_producto
+            producto.precio = precio_producto
+
+            producto.save()  # Guarda los cambios en la base de datos
+
+            return redirect('adminProductos')
+
+        except Exception as e:
+            error_message = str(e)
+            # Maneja el mensaje de error aquí si es necesario
+
+    return redirect('adminProductos')
+
 def tienda(request):
-    productos = Producto.objects.all().order_by('idProducto')
-    paginator = Paginator(productos, 6)
+    precios = [
+        {'nombre': 'Menos de $10.000', 'min': 0, 'max': 10000},
+        {'nombre': '$10.000 - $20.000', 'min': 10000, 'max': 20000},
+        {'nombre': '$20.000 - $60.000', 'min': 20000, 'max': 60000},
+        {'nombre': '$60.000 - $100.000', 'min': 60000, 'max': 100000},
+        {'nombre': 'más $100.000', 'min': 100000, 'max': 1000000000},
+        {'nombre': 'Mostrar todos','min':0,'max':999999999999}
+        # Agrega más rangos de precios según sea necesario
+    ]
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+    # mostramos productos de la tienda 
+    if min_price and max_price:
+        productos = Producto.objects.filter(precio__gte=min_price, precio__lte=max_price)
+    else:
+        productos = Producto.objects.all()
+    paginator = Paginator(productos, 12)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     print(page)
-    context = {'page': page}
+    
 
-    return render(request, 'tienda.html', context)
+    return render(request, 'tienda.html', {'page': page, 'productos': productos, 'precios': precios})
   

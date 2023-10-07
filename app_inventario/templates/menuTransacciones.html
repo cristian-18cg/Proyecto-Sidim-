@@ -1,0 +1,29 @@
+<div class="d-flex" id="wrapper">
+    <!-- Menú Lateral -->
+    <div class="col-md-12" id="sidebar-wrapper">
+        <h1>Gestión de Transacciones</h1>
+        <div class="list-group list-group-flush">
+            <a href="#" class="list-group-item list-group-item-action text-dark">Ver Transacciones</a>
+            <a href="#" class="list-group-item list-group-item-action text-dark"
+                onclick="mostrarProveedores()">Ver Proveedores</a>
+            <a href="#" class="list-group-item list-group-item-action text-dark"
+                onclick="mostrarRegistrarCompra()">Registrar Transacción</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function mostrarProveedores() {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('proveedoresRegistrados').style.display = 'block';
+    }
+
+    function mostrarRegistrarCompra() {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('formularioRegistroCompra').style.display = 'block';
+    }
+</script>

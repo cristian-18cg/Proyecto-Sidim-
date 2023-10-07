@@ -1,0 +1,219 @@
+<h1>Registro de Entrada</h1>
+<form method="POST" action="{% url 'registrar_entrada' %}" id="registroCompra">
+    {% csrf_token %}
+    <div class="row mb-3">
+        <!-- Selecciona el subtipo de transacción (Entradas) -->
+        <div class="col-md-4">
+            <label for="subtipo">Tipo de Entrada</label>
+            <select name="subtipo" id="subtipo" class="form-control">
+                {% for subtipo in subtipos_entrada %}
+                <option value="{{ subtipo.idSubtipo }}">{{ subtipo.nombreSubtipo }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Fecha -->
+        <div class="col-md-4">
+            <label for="fechaIngreso">Fecha</label>
+            <input type="date" name="fechaIngreso" id="fechaIngreso" class="form-control" required>
+        </div>
+
+    </div>
+    <div class="row mb-3">
+        <!-- Proveedor -->
+        <div class="col-md-4">
+            <label for="idProveedor">Proveedor</label>
+            <select name="idProveedor" id="idProveedor" class="form-control" required>
+                <option value="">Seleccionar Proveedor</option>
+                {% for proveedor in proveedores %}
+                <option value="{{ proveedor.idProveedor }}">{{ proveedor.nombreProveedor }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label for="valor_total">Valor Total</label>
+            <input type="number" name="valor_total" id="valor_total" class="form-control" readonly>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <!-- Detalles de la entrada -->
+            <p>Detalles de la Entrada</p>
+        </div>
+    </div>
+
+    <div id="detalle_entrada_1">
+        <div class="row mb-3">
+            <div class="col-md-3">
+                <label for="producto_1">Producto</label>
+                <select name="producto_1" id="producto_1" class="form-control">
+                    <option value="">Seleccionar Producto</option>
+                    {% for producto in productos %}
+                    <option value="{{ producto.idProducto }}" data-precio="{{ producto.precio }}">{{ producto.nombre }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label for="cantidad_1">Cantidad</label>
+                <input type="number" name="cantidad_1" id="cantidad_1" class="form-control">
+            </div>
+
+            <div class="col-md-3">
+                <label for="fecha_1">Fecha de Vencimiento</label>
+                <input type="date" name="fecha_1" id="fecha_1" class="form-control" required>
+            </div>
+
+            <div class="col-md-3">
+                <label for="total_1">Precio Total</label>
+                <input type="number" name="total_1" id="total_1" class="form-control" readonly>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <!-- Botón para agregar más detalles de entrada -->
+            <button type="button" class="btn btn-primary" id="agregar_detalle">Agregar Detalle</button>
+        </div>
+
+        <div class="col-md-6">
+            <!-- Botón para enviar el formulario -->
+            <button type="submit" class="btn btn-success">Registrar Entrada</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    // Código JavaScript para agregar dinámicamente detalles de entrada
+    let detalleCounter = 1;
+    let valorTotal = 0;
+
+    function calcularTotal(detalleCounter) {
+        const cantidadInput = document.getElementById(`cantidad_${detalleCounter}`);
+        const precioSelect = document.getElementById(`producto_${detalleCounter}`);
+        const totalInput = document.getElementById(`total_${detalleCounter}`);
+
+        cantidadInput.addEventListener('input', () => {
+            const cantidad = parseFloat(cantidadInput.value);
+            const precio = parseFloat(precioSelect.options[precioSelect.selectedIndex].getAttribute('data-precio'));
+
+            if (!isNaN(cantidad) && !isNaN(precio)) {
+                const total = cantidad * precio;
+                totalInput.value = total.toFixed(2);
+                actualizarValorTotal();
+            } else {
+                totalInput.value = '';
+            }
+        });
+    }
+
+    function actualizarValorTotal() {
+        valorTotal = 0;
+        const precioTotalInputs = document.querySelectorAll('input[name^="total_"]');
+
+        precioTotalInputs.forEach(input => {
+            if (input.value) {
+                valorTotal += parseFloat(input.value);
+            }
+        });
+
+        // Mostrar el valor total en el campo "valor_total"
+        document.getElementById('valor_total').value = valorTotal.toFixed(2);
+    }
+
+    document.getElementById('agregar_detalle').addEventListener('click', () => {
+        detalleCounter++;
+        const detalleHtml = `
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="producto_${detalleCounter}">Producto</label>
+                    <select name="producto_${detalleCounter}" id="producto_${detalleCounter}" class="form-control">
+                        <option value="">Seleccionar Producto</option>
+                        {% for producto in productos %}
+                            <option value="{{ producto.idProducto }}" data-precio="{{ producto.precio }}">{{ producto.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="cantidad_${detalleCounter}">Cantidad</label>
+                    <input type="number" name="cantidad_${detalleCounter}" id="cantidad_${detalleCounter}" class="form-control" oninput="calcularTotal(${detalleCounter})">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="fecha_${detalleCounter}">Fecha de Vencimiento</label>
+                    <input type="date" name="fecha_${detalleCounter}" id="fecha_${detalleCounter}" class="form-control" required>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="total_${detalleCounter}">Precio Total</label>
+                    <input type="number" name="total_${detalleCounter}" id="total_${detalleCounter}" class="form-control" readonly>
+                </div>
+            </div>
+        `;
+
+        const detalleContainer = document.getElementById('detalle_entrada_1');
+        const newDetalle = document.createElement('div');
+        newDetalle.innerHTML = detalleHtml;
+        detalleContainer.appendChild(newDetalle);
+
+        // Calcular total para el nuevo detalle
+        calcularTotal(detalleCounter);
+    });
+
+    // Calcular total para el primer detalle
+    calcularTotal(detalleCounter);
+
+    function validarFecha() {
+        const fechaInput = document.getElementById('fechaIngreso'); // Cambia a la primera fecha
+        const fechaActual = new Date();
+
+        // Calcula la fecha máxima permitida (una semana hacia atrás)
+        const fechaMaxima = new Date(fechaActual);
+        fechaMaxima.setDate(fechaMaxima.getDate() - 7);
+
+        const fechaSeleccionada = new Date(fechaInput.value + 'T00:00');
+
+        if (isNaN(fechaSeleccionada) || fechaSeleccionada > fechaActual || fechaSeleccionada < fechaMaxima) {
+            alert(`La fecha en el campo ${fechaInput.previousElementSibling.textContent} debe estar dentro de la última semana.`);
+            fechaInput.value = '';
+        }
+    }
+
+    // Agrega el evento blur solo al campo de fecha_1
+    const fechaInput = document.getElementById('fechaIngreso');
+    fechaInput.addEventListener('blur', validarFecha);
+
+    // Función para validar la fecha de vencimiento de los detalles
+    function validarFechaVencimiento(detalleCounter) {
+        const fechaVencimientoInput = document.getElementById(`fecha_${detalleCounter}`);
+        const fechaActual = new Date();
+
+        // Calcula la fecha mínima permitida (6 meses en el futuro)
+        const fechaMinima = new Date(fechaActual);
+        fechaMinima.setMonth(fechaMinima.getMonth() + 6);
+
+        const fechaSeleccionada = new Date(fechaVencimientoInput.value + 'T00:00');
+
+        if (isNaN(fechaSeleccionada) || fechaSeleccionada < fechaMinima) {
+            alert(`La fecha de vencimiento en el detalle ${detalleCounter} debe ser al menos 6 meses en el futuro.`);
+            fechaVencimientoInput.value = '';
+        }
+    }
+
+    // Agrega el evento blur a todos los campos de fecha de vencimiento
+    for (let i = 1; i <= detalleCounter; i++) {
+        const fechaVencimientoInput = document.getElementById(`fecha_${i}`);
+        fechaVencimientoInput.addEventListener('blur', () => {
+            validarFechaVencimiento(i);
+        });
+    }
+
+
+
+
+</script>

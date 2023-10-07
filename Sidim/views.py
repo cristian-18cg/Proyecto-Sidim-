@@ -4,13 +4,14 @@ from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models  import User
 from django.contrib.auth import login, logout,authenticate, update_session_auth_hash
 from django.db import IntegrityError
-from .form import UsuariosCreationForm, LoginForm
+from .form import UsuariosCreationForm, LoginForm, CustomPasswordResetForm
 from .models import Usuarios
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.views import PasswordResetView
 
 def home(request):
+   
    if request.method == 'POST':
     action = request.POST.get('action')
     
@@ -123,5 +124,7 @@ def cambiar_contrasena(request):
     return render(request, 'profile.html')
 
 
-
+class CustomPasswordResetView(PasswordResetView):
+    email_template_name = 'registration/password_reset_email.html'
+    form_class = CustomPasswordResetForm
   

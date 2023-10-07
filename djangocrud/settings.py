@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app_productos',
+    'app_inventario',
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,14 @@ AUTHENTICATION_BACKENDS = ['Sidim.backends.UsuariosBackend',
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com' 
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'sdimdjango@gmail.com' 
+EMAIL_HOST_PASSWORD = 'sidimdjango2023'  
+
+EMAIL_SUBJECT_PREFIX = '[SIDIM] '
+DEFAULT_FROM_EMAIL = 'noreply@tudominio.com'
+PASSWORD_RESET_TIMEOUT = 3600
