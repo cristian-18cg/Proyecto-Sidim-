@@ -58,12 +58,12 @@ nav.menu ul {
   border: none;
   background-color: #770000;
   color: #ffffff;
-  padding: 10px 30px;
+
   border-radius: 20px;
   text-transform: uppercase;
   font-size: 14px;
   cursor: pointer;
-  height: 50px;
+
 }
 
 .container .button:hover {
@@ -180,7 +180,7 @@ justify-content: center!important;
   position: fixed;
   margin-top: 0;  
   top: 0;
-  right: -400px; /* Cambia este valor para ajustar la posición inicial de la ventana */
+  right: -500px; /* Cambia este valor para ajustar la posición inicial de la ventana */
  /* Cambia este valor para ajustar el ancho de la ventana */
   height: 90%;
   overflow-y: auto;
@@ -190,7 +190,7 @@ justify-content: center!important;
 
 .modal-side.open {
   right: 0;
-  width: 40%;
+  width: 20%;
   min-height: 100%;  
 }
 
@@ -203,9 +203,9 @@ justify-content: center!important;
 .modal-body .btn {
   background-color: #770000!important;
   border:none;
-  padding:15px;
+ 
   border-radius: 10px;
-  margin-top: 2%;
+  
   max-width: 50%;
   
 }
@@ -214,7 +214,7 @@ justify-content: center!important;
   border:none;
   padding:15px;
   border-radius: 10px;
-  margin-top: 2%;
+
   max-width: 50%;
   
 }
@@ -233,6 +233,7 @@ justify-content: center!important;
 #modal-login a {
   color: #000000;
 }
+
 .submenu2{
   display: flex;
   justify-content: flex-end;
@@ -243,31 +244,34 @@ justify-content: center!important;
   margin-top: 1%;
   padding-left: 5%;
 }
+
 .modal-body2{
   display: flex;
   justify-content: center; /* Centra horizontalmente */
   align-items: center;   
+  max-height: 10rem;
 }
  .form-group{
-  width: 100%;
+  width: 90%;
   margin: 20px 10px 30px 10px ;
   
 }
 .btn{
   width: 90%;
   margin: 20px 10px 30px 10px ;
-  
+  max-height: 2.5rem;
 }
 
 .form-control{
   width: 90%;
   text-align: left;
   border-radius: 10px;
-  height: 50px;
+  height: 2.5rem;
+  max-height: 2.5rem;
 }
 
 h2{
-  margin-left: 30%;
+  text-align: center!important;
   color: #000000;
 
 }
@@ -275,6 +279,7 @@ h2{
 .modal-header{
   border: none;
   max-height: auto;
+  text-align: center;
 }
 
 .subscribe-box {

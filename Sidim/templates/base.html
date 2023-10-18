@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_filters %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,16 +41,17 @@
     <!-- Ventana modal login -->
     <div class="modal-side" id="loginModal">
         <div class="modal-content">
-           
-            
-            <button type="button" class="boton close" data-dismiss="modal" style="   background-color: #bdbdbda7;border-color: #0000003b;border-radius: 20%!important;max-width:1.5rem;">
-                    <span aria-hidden="true">&times;</span>
+
+
+            <button class="boton close" data-dismiss="modal"
+                style="   background-color: #bdbdbda7;border-color: #0000003b;border-radius: 20%!important;max-width:1.5rem;">
+                <span aria-hidden="true">&times;</span>
             </button>
-           
-            <div class="modal-header">     
-             <h2 class="modal-login" style="padding-right:30%">Iniciar sesión</h2>
+
+            <div class="modal-header" style="text-align: center!important;">
+                <h2 style="margin-left: 18%;">Iniciar sesión</h2>
             </div>
-            <div class="modal-body ">
+            <div class="modal-body">
                 <!-- Formulario de inicio de sesión -->
                 <form method="post" action="{% url 'home' %}" name="login">
                     {% csrf_token %}
@@ -58,40 +60,49 @@
                         placeholder="Correo electrónico" required>
                     <label for="login-password" style="padding-top:3% ;">Password</label>
                     <input type="password" class="form-control" id="login-password" name="password" required>
-                    <button type="submit" class="btn btn-primary" name="action" value="login"style="margin-left:20%!important">Login</button>
+                    <button type="submit" class="btn btn-primary" name="action" value="login"
+                        style="margin-left:20%!important">Login</button>
                 </form>
-                <div>
-
-                    <p>
-                        <a id="registerLink" class="link-opacity-100" href="#"
-                            style="color: rgb(0, 0, 0); margin-left: 5rem; font-weight: bold;">
-                            ¿No tienes cuenta? Regístrate
+                <div style="margin-left: 10%!important;">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <p class="mb-0">¿No tienes cuenta?</p>
+                        </div>
+                        <div style="margin-left: 10px;">
+                            <a id="registerLink" class="link-opacity-100" href="#" style="color: rgb(0, 0, 0); font-weight: bold;">Regístrate</a>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <a id="olvidocontra" class="link-opacity-100" href="{% url 'reset_password' %}" style="color: rgb(0, 0, 0); font-weight: bold;">
+                            ¿Se te olvidó la contraseña?
                         </a>
-                    </p>
-                     <p>
-                        <a id="olvidocontra" class="link-opacity-100" href="{% url 'reset_password' %}"
-                            style="color: rgb(0, 0, 0); margin-left: 5rem; font-weight: bold;">
-                            ¿Se te olvido la contraseña?
-                        </a>
-                    </p>
-
-
+                    </div>
                 </div>
-             
+                
+
+
+
+                
+
             </div>
 
+
         </div>
+
+    </div>
     </div>
 
     <!-- Ventana modal registro -->
     <div class="modal-side" id="registerModal">
         <div class="modal-content">
-            <button type="button" class="close" style=" background-color: #bdbdbda7;border-color: #0000003b;border-radius: 20%!important;max-width:1.5rem;" data-dismiss="modal" >
-                    <span aria-hidden="true">&times;</span>
+            <button type="button" class="close"
+                style=" background-color: #bdbdbda7;border-color: #0000003b;border-radius: 20%!important;max-width:1.5rem;"
+                data-dismiss="modal">
+                <span aria-hidden="true">&times;</span>
             </button>
-            <h2 class="modal-login" style=" margin-left: 30%;">Registro</h2>
+
             <div class="modal-header">
-                
+                <h2 class="modal-login" style="margin-left: 28%;">Registro</h2>
             </div>
             <div class="modal-body ">
                 <!-- Formulario de registro -->
@@ -99,18 +110,19 @@
                     {% csrf_token %}
                     {{form_registro.as_p}}
 
-                    <button type="submit" class="btn btn-primary " name="action" value="register"
-                        id="registerButton" style="margin-left:20%!important">Registrarse</button>
+                    <button type="submit" class="btn btn-primary " name="action" value="register" id="registerButton"
+                        style="margin-left:20%!important">Registrarse</button>
                 </form>
                 <div>
                     <p>
-                        <a id="backToLogin" style="margin-top: -10px; color: black;" class="link-back" href="#">Volver al inicio de sesión</a>
+                        <a id="backToLogin" style="margin-top: -10px; color: black;" class="link-back" href="#">Volver
+                            al inicio de sesión</a>
                     </p>
                 </div>
             </div>
         </div>
     </div>
-  
+
     {% block content %}
 
     {% endblock %}
@@ -123,12 +135,13 @@
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header" style="max">
-                    <h5 class="modal-title" id="successModalLabel">Bienvenido</h5>
+                <div class="modal-header" >
+                    <h2 class="modal-title" id="successModalLabel" style="margin-left: 30%;">Bienvenido</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body2">
                     {{ registrado_mensaje }}
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Producto, CategoriaProducto
 from django.core.paginator import Paginator, Page
-
+from django import template
 
 def productos_y_categorias(request):
     productos = Producto.objects.all()
@@ -114,4 +114,3 @@ def tienda(request):
     
 
     return render(request, 'tienda.html', {'page': page, 'productos': productos, 'precios': precios})
-  

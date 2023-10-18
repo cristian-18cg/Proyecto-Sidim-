@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load custom_filters %}
 {% block title %}Tienda{% endblock %}
 {% block content %}
 
@@ -37,7 +37,7 @@
                         <img src="{% static 'images/TapaSidimNegro.png' %}" class="card-img-top" alt="Imagen Predeterminada">
                         {% endif %}
                         <div class="card-body">
-                            <h5 class="card-title">${{ producto.precio }}</h5>
+                            <h5 class="card-title">{{ producto.precio|currency }}</h5>
                             <p class="card-text">{{ producto.nombre }}</p>
                             <div class="card-footer">
                                 <button class="btn btn-danger btn-minus">-</button>

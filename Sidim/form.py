@@ -15,7 +15,9 @@ class CustomPasswordResetForm(PasswordResetForm):
 #Formulario para el registro
 class UsuariosCreationForm(forms.ModelForm):
     confirmar_password = forms.CharField(label='Confirmar contraseña', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'pattern': '^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$', 'title': 'La contraseña debe tener al menos una mayúscula, una minúscula, un número y ser de al menos 8 caracteres.'})
+    )
     class Meta:
         model = Usuarios
         fields = ['nombre', 'apellido', 'idusuario','correo', 'telefono', 'direccion','password']
