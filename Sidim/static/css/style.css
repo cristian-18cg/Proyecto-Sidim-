@@ -44,8 +44,8 @@ nav.menu ul {
   margin-bottom: 10%;
   display: flex;
   flex-direction: column;
-  box-shadow: 8px 8px 8px 8px #bdbdbdbf;
-  width: 80%;
+  box-shadow: 5px 6px 8px 8px #bdbdbdbf;
+  width: 90%;
   background-color: #ffffff;
   border-radius: 30px;
   height: auto!important;
@@ -53,10 +53,10 @@ nav.menu ul {
 
 }
 
-.container .button {
+.button {
   outline: none;
   border: none;
-  background-color: #770000;
+  background-color: #770000!important;
   color: #ffffff;
 
   border-radius: 20px;
@@ -66,8 +66,8 @@ nav.menu ul {
 
 }
 
-.container .button:hover {
-  background-color: #9e0000;
+.button:hover {
+  background-color: #9e0000!important;
 }
 
 .custom-icon {
@@ -190,7 +190,7 @@ justify-content: center!important;
 
 .modal-side.open {
   right: 0;
-  width: 20%;
+  width: 30%;
   min-height: 100%;  
 }
 
@@ -203,20 +203,20 @@ justify-content: center!important;
 .modal-body .btn {
   background-color: #770000!important;
   border:none;
- 
   border-radius: 10px;
-  
   max-width: 50%;
   
 }
 .modal-footer .btn {
-  background-color: #770000!important;
   border:none;
-  padding:15px;
   border-radius: 10px;
-
-  max-width: 50%;
-  
+  max-width: 60%;
+}
+.modal-footer .btn2 {
+  background-color: #7b7b7b!important;
+  border:none;
+  border-radius: 10px;
+  max-width: 60%;
 }
 .modal-body input:focus {
   outline-color: transparent;
@@ -239,6 +239,7 @@ justify-content: center!important;
   justify-content: flex-end;
   align-items:flex-end  ;
   margin-left: 3rem;
+  width: 100%;
 }
 .modal-body{
   margin-top: 1%;
@@ -257,17 +258,44 @@ justify-content: center!important;
   
 }
 .btn{
+  background-color: #770000;
+  border-color: #983b3b;
   width: 90%;
   margin: 20px 10px 30px 10px ;
   max-height: 2.5rem;
+}
+.btn:hover {
+  background-color: #9e0000!important;
+  border-color: #983b3b;
+}
+.btn2{
+  background-color: #7b7b7b!important;
+  border-color: #cacaca;
+  width: 90%;
+  margin: 20px 10px 30px 10px ;
+  max-height: 2.5rem;
+}
+.btn2:hover {
+  background-color: #949494!important;
+  border-color: #111111;
 }
 
 .form-control{
   width: 90%;
   text-align: left;
-  border-radius: 10px;
   height: 2.5rem;
   max-height: 2.5rem;
+
+}
+.form-control2{
+  width: 90%;
+  text-align: left;
+  height: 2.5rem;
+  max-height: 2.5rem;
+  border-radius: 0;
+  border: none; /* Elimina todos los bordes */
+  border-bottom: 0.5px solid #999999; /* Agrega solo el borde inferior */
+  padding: 5px; 
 }
 
 h2{

@@ -1,15 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
-from django.contrib.auth.models  import User
 from django.contrib.auth import login, logout,authenticate, update_session_auth_hash
-from django.db import IntegrityError
-from .form import UsuariosCreationForm, LoginForm, CustomPasswordResetForm
+from .form import UsuariosCreationForm, LoginForm, CustomPasswordResetForm,CustomPasswordResetForm, CustomSetPasswordForm
 from .models import Usuarios
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
+from django.contrib.auth import get_user_model
+from django.core.mail import send_mail, BadHeaderError
 
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.forms import SetPasswordForm
+from django.utils.encoding import force_bytes
+from django.urls import reverse_lazy,reverse
+from django.views import View
+from django.http import HttpRequest
+from django.contrib.auth.views import PasswordResetConfirmView
 def home(request):
    
    if request.method == 'POST':
@@ -124,7 +130,86 @@ def cambiar_contrasena(request):
     return render(request, 'profile.html')
 
 
-class CustomPasswordResetView(PasswordResetView):
-    email_template_name = 'registration/password_reset_email.html'
-    form_class = CustomPasswordResetForm
-  
+class CustomPasswordResetView(View):
+    template_name = 'registration/password_reset_form.html'
+
+    def get(self, request):
+        form = CustomPasswordResetForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = CustomPasswordResetForm(request.POST)
+        if form.is_valid():
+            correo = form.cleaned_data['correo']
+
+            # Obtiene el usuario con el correo proporcionado
+            User = get_user_model()
+            try:
+                user = User.objects.get(correo=correo)
+            except User.DoesNotExist:
+                messages.error(request, 'No hay ninguna cuenta asociada a este correo electrónico.')
+                return redirect('password_reset_form')  # Reemplaza con la URL de tu página de error
+
+            # Genera el token de reinicio de contraseña
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+
+            # Construye la URL completa para restablecer la contraseña
+            reset_url = request.build_absolute_uri(
+                reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+            )
+
+            # Intenta enviar el correo electrónico
+            try:
+                send_mail(
+                    'Reestablecimiento de contraseña SIDIM',
+                    f'Sigue este enlace para restablecer tu contraseña: {reset_url}',
+                    'noreply@example.com',
+                    [correo],
+                    fail_silently=False,
+                )
+            except BadHeaderError as e:
+                messages.error(request, 'Error al construir el encabezado del correo electrónico.')
+                return redirect('password_reset_confirm')  # Reemplaza con la URL de tu página de error
+
+            messages.success(request, 'Se ha enviado un enlace de restablecimiento de contraseña a tu correo electrónico.')
+            return redirect('password_reset_done')  # Reemplaza con la URL de éxito
+
+        return render(request, self.template_name, {'form': form})
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'registration/password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+    form_class = CustomSetPasswordForm
+
+    def get_user(self, uidb64):
+        try:
+            uid = urlsafe_base64_decode(uidb64).decode('utf-8')
+            user = get_user_model().objects.get(pk=uid)
+            return user
+        except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist, UnicodeDecodeError):
+            return None
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        uidb64 = self.kwargs['uidb64']
+        token = self.kwargs['token']
+
+        user = self.get_user(uidb64)
+        if user is not None and default_token_generator.check_token(user, token):
+            kwargs['user'] = user
+        else:
+            messages.error(self.request, 'El enlace de restablecimiento de contraseña no es válido.')
+            return {}
+
+        return kwargs
+
+    def form_valid(self, form):
+        # Puedes acceder a los campos específicos de tu modelo de usuario personalizado aquí
+        # Ejemplo: form.cleaned_data['user'].nombre
+        login(self.request, form.user)
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, 'Hubo un problema con el formulario de restablecimiento de contraseña.')
+        return redirect('home') 

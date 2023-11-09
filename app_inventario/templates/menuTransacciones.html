@@ -1,11 +1,13 @@
+
 <div class="d-flex" id="wrapper">
     <!-- Menú Lateral -->
     <div class="col-md-12" id="sidebar-wrapper">
-        <h1>Gestión de Transacciones</h1>
+        <h2>Gestión de Transacciones</h2>
         <div class="list-group list-group-flush">
-            <a href="#" class="list-group-item list-group-item-action text-dark">Ver Transacciones</a>
-            <a href="#" class="list-group-item list-group-item-action text-dark"
-                onclick="mostrarProveedores()">Ver Proveedores</a>
+            <a href="#" class="list-group-item list-group-item-action text-dark" onclick="mostrarTransacciones()">Ver
+                Transacciones</a>
+            <a href="#" class="list-group-item list-group-item-action text-dark" onclick="mostrarProveedores()">Ver
+                Proveedores</a>
             <a href="#" class="list-group-item list-group-item-action text-dark"
                 onclick="mostrarRegistrarCompra()">Registrar Transacción</a>
         </div>
@@ -13,6 +15,13 @@
 </div>
 
 <script>
+    function mostrarTransacciones() {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('transaccionesRegistradas').style.display = 'block';
+    }
+
     function mostrarProveedores() {
         document.querySelectorAll('.content-section').forEach(section => {
             section.style.display = 'none';
@@ -25,5 +34,12 @@
             section.style.display = 'none';
         });
         document.getElementById('formularioRegistroCompra').style.display = 'block';
+    }
+
+    function mostrarDetalles() {
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        document.getElementById('detallesTransaccion').style.display = 'block';
     }
 </script>

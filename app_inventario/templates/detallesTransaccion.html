@@ -1,0 +1,22 @@
+<!-- Detalles de la Transacción -->
+{% load static %}
+<div>
+    <h1>Detalles de Transacción</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id Detalle</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody id="detallesTabla">
+            <!-- Aquí se mostrarán los detalles de la transacción seleccionada mediante AJAX -->
+        </tbody>
+    </table>
+    <div class="col-md-6">
+        <!-- Botón para agregar más detalles de entrada -->
+        <button type="button" class="btn btn-primary" id="" onclick="mostrarTransacciones()">Volver</button>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+{% block content %}
+
+<div class="container-fluid container" style="min-width: 95%; justify-content:center; align-items: center;">
+    <h1>Inventario</h1>
+    <table class="table" style="width: 90%; ;">
+        <thead>
+            <tr>
+                <th style="width: 10%;">Número de Registro</th>
+                <th style="width: 20%;">Producto</th>
+                <th style="width: 10%;">Cantidad</th>
+                <th style="width: 10%;">Precio x Unidad</th>
+                <th style="width: 15%;">Fecha de llegada</th>
+                <th style="width: 15%;">Fecha de vencimiento</th>
+            </tr>
+        </thead>
+        <tbody id="detallesTabla">
+            {% for existencia in existencias %}
+            <tr>
+                <td>{{ existencia.idExistencia }}</td>
+                <td>{{ existencia.idProducto.nombre }}</td>
+                <td>{{ existencia.cantidad }}</td>
+                <td style="text-align: right;">{{ existencia.idProducto.precio|floatformat:2 }}</td>
+                <td>{{ existencia.fechaLlegada|date:"d-m-Y" }}</td>
+                <td>{{ existencia.fechaVencimiento|date:"d-m-Y" }}</td>
+            </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

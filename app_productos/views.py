@@ -1,18 +1,20 @@
 from django.shortcuts import render, redirect
 from .models import Producto, CategoriaProducto
 from django.core.paginator import Paginator, Page
+from app_inventario.models import Existencias
 from django import template
-
+from django.contrib.admin.views.decorators import staff_member_required
+@staff_member_required
 def productos_y_categorias(request):
     productos = Producto.objects.all()
     categorias = CategoriaProducto.objects.all()
     context = {'productos': productos, 'categorias': categorias}
     return render(request, 'adminProductos.html', context)
-
+@staff_member_required
 def crear_categoria(request):
     if request.method == 'POST':
         try:
-            nombre_categoria = request.POST.get('nameCategory')
+            nombre_categoria = request.POST.get('nombreCategoria')
 
             if nombre_categoria.strip():
                 nueva_categoria = CategoriaProducto(Nombre=nombre_categoria)
@@ -24,7 +26,7 @@ def crear_categoria(request):
             # Puedes manejar el mensaje de error y validación de campos aquí
 
     return redirect('adminProductos')
-
+@staff_member_required
 def crear_producto(request):
     if request.method == 'POST':
         try:
@@ -59,6 +61,7 @@ def crear_producto(request):
 
     return redirect('adminProductos')  # Redirigir en caso de que no sea un método POST
 
+@staff_member_required
 def editar_producto(request):
     if request.method == 'POST':
         try:
@@ -87,7 +90,26 @@ def editar_producto(request):
         except Exception as e:
             error_message = str(e)
             # Maneja el mensaje de error aquí si es necesario
+    return redirect('adminProductos')
+@staff_member_required
+def editar_categoria(request):
+    if request.method == 'POST':
+        try:
+            id_categoria = request.POST.get('idCategoria')
+            nombre_categoria = request.POST.get('nombreCategoria')
 
+            # Busca la instancia de Categoria por ID
+            categoria = CategoriaProducto.objects.get(idCategoria=id_categoria)
+
+            # Actualiza los campos de la categoria
+            categoria.Nombre = nombre_categoria
+
+            categoria.save()  # Guarda los cambios en la base de datos
+            return redirect('adminProductos')
+
+        except Exception as e:
+            error_message = str(e)
+            # Maneja el mensaje de error aquí si es necesario
     return redirect('adminProductos')
 
 def tienda(request):
@@ -97,20 +119,27 @@ def tienda(request):
         {'nombre': '$20.000 - $60.000', 'min': 20000, 'max': 60000},
         {'nombre': '$60.000 - $100.000', 'min': 60000, 'max': 100000},
         {'nombre': 'más $100.000', 'min': 100000, 'max': 1000000000},
-        {'nombre': 'Mostrar todos','min':0,'max':999999999999}
+        {'nombre': 'Mostrar todos', 'min': 0, 'max': 999999999999}
         # Agrega más rangos de precios según sea necesario
     ]
-    min_price = request.GET.get('min_price')
-    max_price = request.GET.get('max_price')
-    # mostramos productos de la tienda 
-    if min_price and max_price:
-        productos = Producto.objects.filter(precio__gte=min_price, precio__lte=max_price)
-    else:
-        productos = Producto.objects.all()
-    paginator = Paginator(productos, 12)
-    page_number = request.GET.get('page')
-    page = paginator.get_page(page_number)
-    print(page)
     
+    # Establecer valores predeterminados si no se proporciona min_price o max_price
+    min_price = request.GET.get('min_price', 0)
+    max_price = request.GET.get('max_price', 999999999999)
+    
+    # Filtrar productos que tengan existencias
+    productos = Producto.objects.filter(precio__gte=min_price, precio__lte=max_price, idProducto__in=Existencias.objects.values('idProducto')).order_by('nombre')
 
-    return render(request, 'tienda.html', {'page': page, 'productos': productos, 'precios': precios})
+    # Número de productos por página
+    productos_por_pagina = 12
+
+    # Número de página actual
+    page_number = request.GET.get('page', 1)
+
+    # Creamos un objeto Paginator para la paginación
+    paginator = Paginator(productos, productos_por_pagina)
+    
+    # Obtenemos los productos de la página actual
+    page = paginator.get_page(page_number)
+
+    return render(request, 'tienda.html', {'page': page, 'productos': page, 'precios': precios})

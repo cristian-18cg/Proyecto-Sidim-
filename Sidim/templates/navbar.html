@@ -1,4 +1,5 @@
 {% load static %}
+{% load static %}
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #9b9797">
     <div class="container-fluid">
@@ -12,61 +13,69 @@
         <div class="collapse navbar-collapse justify-content-start" id="navbarSupportedContent"
             style="font-size: 1.2rem; margin-left:3%;">
             <form class="d-flex">
-                <input class="form-control me-2 " type="search" placeholder="Buscar" aria-label="Buscar" style="margin-top:5%;min-width:80%">
+                <input class="form-control me-2 " type="search" placeholder="Buscar" aria-label="Buscar"
+                    style="margin-top:5%;min-width:80%">
                 <button class="btn btn-search" type="submit">Buscar</button>
             </form>
         </div>
         <div class="d-flex align-items-end">
             <div class="submenu2">
-                
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-cart-fill"
-                viewBox="0 0 16 16">
-                <path
-                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-            </svg>
-             {% if request.session.session_key %}
+                <a href="{% url 'carritoCompras' %}" style="color: #242831">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
+                        class="bi bi-cart-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                    </svg>
+                </a>
 
-            <a href="{% url 'perfil' %}"  style="color: black;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                    class="bi bi-person-lines-fill" viewBox="0 0 16 16">
-                    <path
-                        d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z" />
+                 {% if user.is_authenticated %}
+                <a href="{% url 'perfil' %}" style="color: #242831">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
+                        class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z" />
+                    </svg>
+                </a>
+
+                <a style="color: #242831">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
+                        class="bi bi-bell-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
+                    </svg>
+                </a>
+
+                <a href="/cerrarsesion" style="color: #242831">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
+                        class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z" />
+                        <path fill-rule="evenodd"
+                            d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z" />
+                    </svg>
+                </a> <!-- Cierra sesion y muestra logo de campana  -->
+                {% else %}
+
+                <svg id="user-icon" xmls="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
+                    class="bi bi-person-circle" viewBox="0 0 16 16" data-bs-toggle="modal"
+                    data-bs-target="#registroModal">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                    <path fill-rule="evenodd"
+                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
                 </svg>
-            </a>
-
-            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor" class="bi bi-bell-fill"
-                viewBox="0 0 16 16">
-                <path
-                    d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z" />
-            </svg>
-
-            <a href="/cerrarsesion"  style="color: black;">Cerrar Sesión</a> <!-- Cierra sesion y muestra logo de campana  -->
-            {% else %}
-
-            <svg id="user-icon" xmls="http://www.w3.org/2000/svg" width="36" height="36" fill="currentColor"
-                class="bi bi-person-circle" viewBox="0 0 16 16" data-bs-toggle="modal" data-bs-target="#registroModal">
-                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                <path fill-rule="evenodd"
-                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-            </svg>
-            {% endif %}
-        </div>
+                {% endif %}
             </div>
         </div>
     </div>
+    </div>
 </nav>
-
-
-
-
-  
 
 {% if user.is_staff %}
 <!-- Navbar para empleados (is_staff)-->
 <div class="menu-bar-wrapper">
     <div class="menu-bar">
-        <ul class="submenu">
-            <li class="inicio-item">
+        <ul class="submenu" style="width: 100%;">
+            <li class="" style="max-width:40%;margin-left:3rem;">
                 <span class="text-light">
                     <a href="{% url 'home' %}">
                         <svg class="custom-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
@@ -80,27 +89,30 @@
             <li class="menu-item">
                 <a href="{%url 'tienda'%}">Tienda</a>
             </li>
-            
+
             <li class="nav-item">
                 <a href="{% url 'adminProductos' %}">Productos</a>
             </li>
 
             <li class="nav-item">
-                <a href="licores.html">Inventario</a>
+                <a href="{% url 'adminTransacciones' %}">Transacciones</a>
             </li>
 
             <li class="nav-item">
-                <a href="{% url 'adminTransacciones' %}">Transacciones</a>
-            </li>           
+                <a href="{% url 'inventario' %}">Inventario</a>
+            </li>
+            <li class="nav-item "style="position: absolute; right:0.5; margin-top:0.5%;">
+                <h5 style=" color:#ffffff; ">Hola, {{user.nombre}}</h5>
+            </li>
         </ul>
     </div>
-    <div class="barra-horizontal"></div>
 </div>
-{% else %}
+
+{% elif user.is_authenticated %}
 <!-- Navbar para Clientes (no is_staff)-->
 <div class="menu-bar-wrapper">
     <div class="menu-bar">
-        <ul class="submenu">
+        <ul class="submenu" style="width: 100%;">
             <li class="" style="max-width:40%;margin-left:3rem;">
                 <span class="text-light">
                     <a href="{% url 'home' %}" sty>
@@ -111,29 +123,71 @@
                         </svg>
                     </a>
                 </span>
-
             </li>
             <li class="menu-item">
                 <a href="{%url 'tienda'%}">Tienda</a>
             </li>
 
             <li><a href="licores.html">Licores</a>
-             
+
             </li>
 
             <li><a href="#">Cervezas</a>
-                
+
             </li>
 
             <li><a href="#">Bebidas </a>
-              
+
             </li>
 
             <li><a href="#">Gaseosas </a>
-                
+
             </li>
+            <li class="nav-item "style="position: absolute; right:0.5; margin-top:0.5%;">
+                <h5 style=" color:#ffffff; ">Hola, {{user.nombre}}</h5>
+            </li>
+            
         </ul>
     </div>
-    <div class="barra-horizontal"></div>
+</div>
+{% else %}
+<div class="menu-bar-wrapper">
+    <div class="menu-bar">
+        <ul class="submenu" style="width: 100%;">
+            <li class="" style="max-width:40%;margin-left:3rem;">
+                <span class="text-light">
+                    <a href="{% url 'home' %}" sty>
+                        <svg class="custom-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                            class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+                        </svg>
+                    </a>
+                </span>
+            </li>
+            <li class="menu-item">
+                <a href="{%url 'tienda'%}">Tienda</a>
+            </li>
+
+            <li><a href="licores.html">Licores</a>
+
+            </li>
+
+            <li><a href="#">Cervezas</a>
+
+            </li>
+
+            <li><a href="#">Bebidas </a>
+
+            </li>
+
+            <li><a href="#">Gaseosas </a>
+
+            </li>
+            
+            
+           
+        </ul>
+    </div>
 </div>
 {% endif %}

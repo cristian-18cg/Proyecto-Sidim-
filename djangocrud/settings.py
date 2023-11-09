@@ -143,14 +143,13 @@ AUTHENTICATION_BACKENDS = ['Sidim.backends.UsuariosBackend',
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#CONFIGURACION RESTAURAR CONTRASEÑA
+EMAIL_HOST = 'smtp.gmail.com'  # Dirección del servidor SMTP de Gmail
+EMAIL_PORT = 587  # Puerto SMTP de Gmail para TLS
+EMAIL_USE_TLS = True  # Habilitar el uso de TLS
+EMAIL_USE_SSL = False  # Deshabilitar el uso de SSL
+EMAIL_HOST_USER = 'sdimdjango@gmail.com'  # Tu dirección de correo de Gmail
+EMAIL_HOST_PASSWORD = 'dqti fevk taxu kkjh'  # Contraseña de tu cuenta de Gmail
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com' 
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'sdimdjango@gmail.com' 
-EMAIL_HOST_PASSWORD = 'sidimdjango2023'  
 
-EMAIL_SUBJECT_PREFIX = '[SIDIM] '
-DEFAULT_FROM_EMAIL = 'noreply@tudominio.com'
-PASSWORD_RESET_TIMEOUT = 3600
+

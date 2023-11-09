@@ -1,3 +1,4 @@
+
 <h1>Registro de Entrada</h1>
 <form method="POST" action="{% url 'registrar_entrada' %}" id="registroCompra">
     {% csrf_token %}
@@ -5,7 +6,7 @@
         <!-- Selecciona el subtipo de transacción (Entradas) -->
         <div class="col-md-4">
             <label for="subtipo">Tipo de Entrada</label>
-            <select name="subtipo" id="subtipo" class="form-control">
+            <select name="subtipo" id="subtipo" class="form-control2">
                 {% for subtipo in subtipos_entrada %}
                 <option value="{{ subtipo.idSubtipo }}">{{ subtipo.nombreSubtipo }}</option>
                 {% endfor %}
@@ -15,7 +16,7 @@
         <!-- Fecha -->
         <div class="col-md-4">
             <label for="fechaIngreso">Fecha</label>
-            <input type="date" name="fechaIngreso" id="fechaIngreso" class="form-control" required>
+            <input type="date" name="fechaIngreso" id="fechaIngreso" class="form-control2" required>
         </div>
 
     </div>
@@ -23,7 +24,7 @@
         <!-- Proveedor -->
         <div class="col-md-4">
             <label for="idProveedor">Proveedor</label>
-            <select name="idProveedor" id="idProveedor" class="form-control" required>
+            <select name="idProveedor" id="idProveedor" class="form-control2" required>
                 <option value="">Seleccionar Proveedor</option>
                 {% for proveedor in proveedores %}
                 <option value="{{ proveedor.idProveedor }}">{{ proveedor.nombreProveedor }}</option>
@@ -33,7 +34,7 @@
 
         <div class="col-md-4">
             <label for="valor_total">Valor Total</label>
-            <input type="number" name="valor_total" id="valor_total" class="form-control" readonly>
+            <input type="number" name="valor_total" id="valor_total" class="form-control2" readonly>
         </div>
     </div>
 
@@ -48,7 +49,7 @@
         <div class="row mb-3">
             <div class="col-md-3">
                 <label for="producto_1">Producto</label>
-                <select name="producto_1" id="producto_1" class="form-control">
+                <select name="producto_1" id="producto_1" class="form-control2">
                     <option value="">Seleccionar Producto</option>
                     {% for producto in productos %}
                     <option value="{{ producto.idProducto }}" data-precio="{{ producto.precio }}">{{ producto.nombre }}
@@ -59,17 +60,17 @@
 
             <div class="col-md-3">
                 <label for="cantidad_1">Cantidad</label>
-                <input type="number" name="cantidad_1" id="cantidad_1" class="form-control">
+                <input type="number" name="cantidad_1" id="cantidad_1" class="form-control2">
             </div>
 
             <div class="col-md-3">
                 <label for="fecha_1">Fecha de Vencimiento</label>
-                <input type="date" name="fecha_1" id="fecha_1" class="form-control" required>
+                <input type="date" name="fecha_1" id="fecha_1" class="form-control2" required>
             </div>
 
             <div class="col-md-3">
                 <label for="total_1">Precio Total</label>
-                <input type="number" name="total_1" id="total_1" class="form-control" readonly>
+                <input type="number" name="total_1" id="total_1" class="form-control2" readonly>
             </div>
         </div>
     </div>
@@ -77,12 +78,12 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <!-- Botón para agregar más detalles de entrada -->
-            <button type="button" class="btn btn-primary" id="agregar_detalle">Agregar Detalle</button>
+            <button type="button" class="btn2 btn btn-primary" style="max-width: 70%;"id="agregar_detalle">Agregar Detalle</button>
         </div>
 
         <div class="col-md-6">
             <!-- Botón para enviar el formulario -->
-            <button type="submit" class="btn btn-success">Registrar Entrada</button>
+            <button type="submit" class="btn btn-primary" style="max-width: 70%;">Registrar Entrada</button>
         </div>
     </div>
 </form>
@@ -153,8 +154,7 @@
                     <label for="total_${detalleCounter}">Precio Total</label>
                     <input type="number" name="total_${detalleCounter}" id="total_${detalleCounter}" class="form-control" readonly>
                 </div>
-            </div>
-        `;
+            </div>`;
 
         const detalleContainer = document.getElementById('detalle_entrada_1');
         const newDetalle = document.createElement('div');
@@ -212,8 +212,4 @@
             validarFechaVencimiento(i);
         });
     }
-
-
-
-
 </script>

@@ -1,30 +1,35 @@
 
 <div class="container-fluid px-0" style="width: 90%;">
     <h1>Transacciones</h1>
-    <table class="table">
+    <table class="table" id="transaccionTable">
         <thead>
             <tr>
-                <th style="width: 20%;">Subtipo</th>
-                <th style="width: 20%;">Fecha de Ingreso</th>
+                <th style="width: 10%;">Número Transacción</th>
+                <th style="width: 10%;">Tipo</th>
+                <th style="width: 15%;">Fecha de Ingreso</th>
                 <th style="width: 20%;">Proveedor</th>
-                <th style="width: 20%;">Valor Total</th>
+                <th style="width: 10%;">Valor Total</th>
                 <th style="width: 10%;"></th>
             </tr>
         </thead>
         <tbody>
             {% for transaccion in transacciones %}
             <tr>
+                <td>{{ transaccion.idTransaccion }}</td>
                 <td>{{ transaccion.subtipo.nombreSubtipo }}</td>
-                <td>{{ transaccion.fecha }}</td>
+                <td>{{ transaccion.fecha|date:"d-m-Y" }}</td>
                 <td>{{ transaccion.idProveedor.nombreProveedor }}</td>
-                <td>{{ transaccion.valorTotal }}</td>
+                <td style="text-align: right;">{{ transaccion.valorTotal|floatformat:2 }}</td>
                 <td>
-                    <!-- Botón para abrir el modal "Editar Transacción" -->
-                    <a href="#" class="editar-transaccion" data-toggle="modal" data-target="#editarTransaccionModal"
-                        data-id="{{ transaccion.idTransaccion }}" data-subtipo="{{ transaccion.subtipo.idSubtipo }}"
-                        data-fecha="{{ transaccion.fecha }}" data-proveedor="{{ transaccion.idProveedor.idProveedor }}"
-                        data-valor="{{ transaccion.valorTotal }}">
-                        <!-- Agrega aquí el icono de edición, si lo deseas -->
+                    <!-- Botón para abrir los "Detalles de la Transacción" -->
+                    <a href="#" class="detalles-transaccion" 
+                        data-id="{{ transaccion.idTransaccion }}" onclick="mostrarDetalles()">
+                        <!-- Icono de detalles -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-file-text-fill" viewBox="0 0 16 16">
+                            <path
+                                d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1zm0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1z" />
+                        </svg>
                     </a>
                 </td>
             </tr>
@@ -32,3 +37,43 @@
         </tbody>
     </table>
 </div>
+
+<!-- Script para cargar detalles de la transacción en el modal -->
+<script>
+    var transaccionSeleccionadaId = null; // Variable para almacenar el ID de la transacción seleccionada
+    $(document).ready(function () {
+        // Función para abrir el modal de detalles de la transacción
+        $('.detalles-transaccion').click(function () {
+            transaccionSeleccionadaId = $(this).data('id');
+
+            console.log(transaccionSeleccionadaId);
+
+            // Realizar una solicitud AJAX para obtener los detalles de la transacción
+            $.ajax({
+                url: '/detalles_transaccion/',  // Ajusta la URL a tu configuración
+                method: 'GET',
+                data: { transaccion_id: transaccionSeleccionadaId },
+                success: function (data) {
+                    // Manipula los datos recibidos (data) para llenar la tabla de detalles
+                    var detallesTabla = $('#detallesTabla');
+                    detallesTabla.empty();
+
+                    for (var i = 0; i < data.detalles.length; i++) {
+                        var detalle = data.detalles[i];
+                        var row = '<tr>' +
+                            '<td>' + detalle.idDetalle + '</td>' +
+                            '<td>' + detalle.nombreProducto + '</td>' +
+                            '<td>' + detalle.cantidad + '</td>' +
+                            '<td>' + detalle.subtotal + '</td>' +
+                            '</tr>';
+                        detallesTabla.append(row);
+                    }
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log('Error en la solicitud AJAX: ' + error);
+                }
+            });
+        });
+    });
+</script>

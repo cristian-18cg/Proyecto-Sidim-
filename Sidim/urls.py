@@ -4,7 +4,7 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from .views import CustomPasswordResetView
+from .views import CustomPasswordResetView,CustomPasswordResetConfirmView
 
 urlpatterns = [
     path('', views.home, name= "home"),
@@ -14,8 +14,10 @@ urlpatterns = [
     path('perfil/', views.perfil, name='perfil'),
     path('guardar_perfil/', views.guardar_perfil, name='guardar_perfil'),
     path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'),
-    path('reset_password/', CustomPasswordResetView.as_view(), name='reset_password'),
-    path('reset_password/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
-    path('reset_password/confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('reset_password/complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    path('password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    #path('password_reset/confirm/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('password_reset/confirm/<str:uidb64>/<str:token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+  # path('reset/confirm/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ] 

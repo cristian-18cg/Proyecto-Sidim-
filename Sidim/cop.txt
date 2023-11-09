@@ -1,0 +1,96 @@
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    template_name = 'registration/password_reset_confirm.html'  # Ruta a tu plantilla personalizada
+    success_url = '/home/'  # Redirige a la página de inicio de sesión una vez que se cambia la contraseña
+
+    def form_valid(self, form):
+        # Obtén el token y el UID desde la URL
+        uidb64 = self.kwargs['uidb64']
+        token = self.kwargs['token']
+
+        # Decodifica el UID y verifica el token
+        try:
+            uid = int_to_base36(uidb64)
+            user = get_user_model().objects.get(pk=uid)
+        except (ValueError, OverflowError, get_user_model().DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            # Si el usuario y el token son válidos, cambia la contraseña
+            user.set_password(form.cleaned_data['new_password1'])
+            user.save()
+            return super().form_valid(form)
+        else:
+            return redirect('password_reset_invalid')  # Redirige a una página de error si el token no es válido
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Restablecer contraseña'  # Título personalizado para la página
+        return context
+
+    def get_form_class(self):
+        return CustomSetPasswordForm  # Utiliza tu formulario personalizado si lo tienes    
+
+
+
+
+from django.contrib.auth.forms import PasswordResetForm,SetPasswordForm
+
+
+class CustomSetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label="Nueva contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        strip=False,
+        help_text="La contraseña debe tener al menos 8 caracteres y no puede ser una contraseña común.",
+    )
+    new_password2 = forms.CharField(
+        label="Confirmar contraseña",
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        strip=False,
+    )
+
+    class Meta:
+        fields = ('new_password1', 'new_password2')  
+
+
+
+
+
+
+class CustomPasswordResetView(PasswordResetView):
+
+    email_template_name = 'registration/password_reset_email.html'
+    template_name = 'registration/password_reset_form.html'  # Ruta a tu plantilla personalizada
+    form_class = CustomPasswordResetForm
+    def form_valid(self, form):
+        correo = form.cleaned_data['correo']
+
+        # Obtiene el usuario con el correo proporcionado
+        User = get_user_model()
+        user = User.objects.get(correo=correo)  # Asegúrate de ajustar esto a tu modelo de usuario
+
+        # Genera el token de reinicio de contraseña
+        token = default_token_generator.make_token(user)
+        uid = int_to_base36(user.id)
+        token = urlsafe_base64_encode(force_bytes(token))
+        
+        # Construye la URL para restablecer la contraseña
+        protocol = 'https' if self.request.is_secure() else 'http'
+        current_site = get_current_site(self.request)
+        domain = current_site.domain
+       
+        reset_url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+        # Renderiza el contenido del correo electrónico
+        email_message = render_to_string(self.email_template_name, {
+            'reset_url': reset_url,
+        })
+
+        # Envía el correo electrónico
+        send_mail(
+            self.subject_template_name,
+            email_message,
+            'noreply@example.com',  # Dirección de correo electrónico desde la que se envía
+            [correo],  # Lista de destinatarios
+        )
+
+        return super().form_valid(form)

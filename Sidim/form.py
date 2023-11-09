@@ -1,16 +1,63 @@
 from django import forms
 from django.core.validators import MaxLengthValidator 
 from .models import Usuarios
-from django.contrib.auth.forms import PasswordResetForm
-
-
-
-class CustomPasswordResetForm(PasswordResetForm):
-    correo = forms.EmailField(
-        label="Correo",
+from django.contrib.auth.forms import SetPasswordForm
+from django.core.mail import send_mail
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.translation import gettext as _
+#Enviar correo
+class CustomPasswordResetForm(forms.Form):
+    
+     correo = forms.EmailField(
+        label=("Correo electrónico"),
         max_length=254,
-        widget=forms.EmailInput(attrs={'autocomplete': 'email'})
+        widget=forms.EmailInput(attrs={'autocomplete': 'email'}),
     )
+    
+     def clean_correo(self):
+        correo = self.cleaned_data['correo']
+        return correo
+
+
+     def save(self, domain_override=None, subject_template_name='registration/password_reset_subject.txt',email_template_name='registration/password_reset_email.html', use_https=False,token_generator=default_token_generator, from_email=None, request=None, html_email_template_name=None,extra_email_context=None):
+
+        email = self.cleaned_data['correo']
+        
+        if not domain_override:
+            current_site = get_current_site(request)
+            site_name = current_site.name
+            domain = current_site.domain
+        else:
+            site_name = domain = domain_override
+        
+        email = self.cleaned_data["correo"]
+        
+    
+        send_mail(
+            subject_template_name,
+            email_template_name,
+            extra_email_context,
+            recipient_list=[email],
+            fail_silently=False,
+            html_message=html_email_template_name,
+        )
+
+#Asignar nueva contraseña
+
+class CustomSetPasswordForm(SetPasswordForm):
+    nueva_contraseña = forms.CharField(
+        label='Nueva Contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+    )
+
+    confirmar_contraseña = forms.CharField(
+        label='Confirmar Contraseña',
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+    )
+    
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(user, *args, **kwargs)
 
 #Formulario para el registro
 class UsuariosCreationForm(forms.ModelForm):

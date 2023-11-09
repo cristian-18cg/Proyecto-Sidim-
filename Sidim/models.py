@@ -45,9 +45,8 @@ class Usuarios(AbstractUser, PermissionsMixin):
     password = models.CharField(max_length=128)
     telefono = models.CharField(max_length=10)
     direccion = models.CharField(max_length=100)
-
+    
     objects = UsuariosManager()
-
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
@@ -62,13 +61,16 @@ class Usuarios(AbstractUser, PermissionsMixin):
     USERNAME_FIELD = 'correo'
     REQUIRED_FIELDS = ['idusuario','nombre', 'apellido', 'telefono', 'direccion']
 
-    
+    @property
+    def id(self):
+        return self.idusuario
 
     def __str__(self):
         return self.nombre + ' ' + self.apellido
     class Meta:
         managed = True
         db_table = 'usuarios'
+    
       
 
 # Create your views here.
