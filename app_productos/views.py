@@ -113,6 +113,7 @@ def editar_categoria(request):
     return redirect('adminProductos')
 
 def tienda(request):
+    # Rangos de precios
     precios = [
         {'nombre': 'Menos de $10.000', 'min': 0, 'max': 10000},
         {'nombre': '$10.000 - $20.000', 'min': 10000, 'max': 20000},
@@ -120,16 +121,24 @@ def tienda(request):
         {'nombre': '$60.000 - $100.000', 'min': 60000, 'max': 100000},
         {'nombre': 'más $100.000', 'min': 100000, 'max': 1000000000},
         {'nombre': 'Mostrar todos', 'min': 0, 'max': 999999999999}
-        # Agrega más rangos de precios según sea necesario
     ]
-    
-    # Establecer valores predeterminados si no se proporciona min_price o max_price
+
+    # Obtener valores de búsqueda de la URL
     min_price = request.GET.get('min_price', 0)
     max_price = request.GET.get('max_price', 999999999999)
+    busqueda = request.GET.get('busqueda', '')
     
-    # Filtrar productos que tengan existencias
-    productos = Producto.objects.filter(precio__gte=min_price, precio__lte=max_price, idProducto__in=Existencias.objects.values('idProducto')).order_by('nombre')
+    # Filtrar productos que tengan existencias y que coincidan con la búsqueda
+    productos = Producto.objects.filter(
+        precio__gte=min_price,
+        precio__lte=max_price,
+        idProducto__in=Existencias.objects.values('idProducto'),
+         # Filtrar por nombre que contiene la cadena de búsqueda
+    ).order_by('nombre')
 
+    if busqueda:
+        productos = productos.filter(nombre__icontains=busqueda)
+    print(f'Min Price: {min_price}, Max Price: {max_price}, Búsqueda: {busqueda}')
     # Número de productos por página
     productos_por_pagina = 12
 
@@ -138,8 +147,8 @@ def tienda(request):
 
     # Creamos un objeto Paginator para la paginación
     paginator = Paginator(productos, productos_por_pagina)
-    
+
     # Obtenemos los productos de la página actual
     page = paginator.get_page(page_number)
 
-    return render(request, 'tienda.html', {'page': page, 'productos': page, 'precios': precios})
+    return render(request, 'tienda.html', {'page': page, 'productos': page, 'precios': precios, 'busqueda': busqueda, 'min_price': min_price, 'max_price': max_price})

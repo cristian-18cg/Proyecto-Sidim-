@@ -106,7 +106,7 @@
             </div>
             <div class="modal-body ">
                 <!-- Formulario de registro -->
-                <form action="" method="post" class="my-form ">
+                <form action="{% url 'home' %}" method="post" class="my-form ">
                     {% csrf_token %}
                     {{form_registro.as_p}}
 

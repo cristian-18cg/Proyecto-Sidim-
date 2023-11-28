@@ -16,6 +16,10 @@ from django.urls import reverse_lazy,reverse
 from django.views import View
 from django.http import HttpRequest
 from django.contrib.auth.views import PasswordResetConfirmView
+
+def form_registro(request):
+    return {'form_registro': UsuariosCreationForm()}
+
 def home(request):
    
    if request.method == 'POST':
