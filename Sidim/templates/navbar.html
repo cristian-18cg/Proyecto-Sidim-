@@ -101,6 +101,11 @@
             <li class="nav-item">
                 <a href="{% url 'inventario' %}">Inventario</a>
             </li>
+            {% if user.is_authenticated and user.is_superuser %}
+            <li class="nav-item">
+                <a href="{% url 'Permisos' %}"> Permisos</a>
+            </li>
+            {% endif %}
             <li class="nav-item "style="position: absolute; right:0.5; margin-top:0.5%;">
                 <h5 style=" color:#ffffff; ">Hola, {{user.nombre}}</h5>
             </li>
@@ -168,7 +173,7 @@
             </li>
             {% endfor %}
             
-            C:\Users\USUARIO\Pictures\ivan\Proyecto-Sidim--main\Sidim\templates\navbar.html
+            
            
         </ul>
     </div>

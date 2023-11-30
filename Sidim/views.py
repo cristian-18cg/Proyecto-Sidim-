@@ -19,6 +19,7 @@ from django.contrib.auth.views import PasswordResetConfirmView
 
 def error_404 (request,exception):
     return render(request,'404.html',status=404)
+
 def home(request):
  
    if request.method == 'POST':
@@ -123,6 +124,10 @@ def cambiar_contrasena(request):
 
     return render(request, 'profile.html')
  
+def permisos(request):
+    usuarios = Usuarios.objects.all()
+    
+    return render(request, 'permisos.html',{'usuarios': usuarios})
 
 
 class CustomPasswordResetView(View):

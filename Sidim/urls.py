@@ -15,6 +15,7 @@ urlpatterns = [
    # path('iniciarsesion/', views.iniciarsesion, name= "iniciarsesion"),
     path('perfil/', views.perfil, name='perfil'),
     path('guardar_perfil/', views.guardar_perfil, name='guardar_perfil'),
+    path('permisos/', views.permisos, name='Permisos'),
     path('cambiar_contrasena/', views.cambiar_contrasena, name='cambiar_contrasena'),
     path('password_reset/', CustomPasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
