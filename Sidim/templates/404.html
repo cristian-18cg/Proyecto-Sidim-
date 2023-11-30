@@ -1,0 +1,10 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}Error 404{% endblock %}
+{% block content %}
+    <div class="container" style="min-width: 95%; justify-content:center; align-items: center;">
+        <h1>Error 404 - Página no encontrada</h1>
+        <p>Lo sentimos la pagina que buscas no esta disponible.</p>
+        <p><a href="{% url 'home' %}" class="btn btn-primary">Volver al home</a></p>
+    </div>
+{% endblock %}

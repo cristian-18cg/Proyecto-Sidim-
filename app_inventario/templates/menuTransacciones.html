@@ -6,8 +6,6 @@
         <div class="list-group list-group-flush">
             <a href="#" class="list-group-item list-group-item-action text-dark" onclick="mostrarTransacciones()">Ver
                 Transacciones</a>
-            <a href="#" class="list-group-item list-group-item-action text-dark" onclick="mostrarProveedores()">Ver
-                Proveedores</a>
             <a href="#" class="list-group-item list-group-item-action text-dark"
                 onclick="mostrarRegistrarCompra()">Registrar Transacción</a>
         </div>
@@ -20,13 +18,6 @@
             section.style.display = 'none';
         });
         document.getElementById('transaccionesRegistradas').style.display = 'block';
-    }
-
-    function mostrarProveedores() {
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.style.display = 'none';
-        });
-        document.getElementById('proveedoresRegistrados').style.display = 'block';
     }
 
     function mostrarRegistrarCompra() {

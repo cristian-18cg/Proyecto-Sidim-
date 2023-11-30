@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-zl_-@1xp&r+))s1-9j(b79drq8p6qyhd226rc-k1)cn5_q%3!h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'Sidim.context_processors.form_registro',
+                'Sidim.context_processors.categorias',
             ],
         },
     },
@@ -130,7 +131,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS =  [BASE_DIR / "static"] ##CCCC
+STATICFILES_DIRS =  [BASE_DIR / "Sidim/static"] ##CCCC
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MEDIA_URL = '/media/'

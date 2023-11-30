@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect
-from .models import Producto, CategoriaProducto
+from .models import Producto, CategoriaProducto, Proveedor
 from django.core.paginator import Paginator, Page
 from app_inventario.models import Existencias
 from django import template
 from django.contrib.admin.views.decorators import staff_member_required
+
 @staff_member_required
 def productos_y_categorias(request):
     productos = Producto.objects.all()
     categorias = CategoriaProducto.objects.all()
-    context = {'productos': productos, 'categorias': categorias}
+    proveedores = Proveedor.objects.all()
+    context = {'productos': productos, 'categorias': categorias, 'proveedores':proveedores}
     return render(request, 'adminProductos.html', context)
+
 @staff_member_required
 def crear_categoria(request):
     if request.method == 'POST':
@@ -26,6 +29,57 @@ def crear_categoria(request):
             # Puedes manejar el mensaje de error y validación de campos aquí
 
     return redirect('adminProductos')
+
+@staff_member_required
+def crear_proveedor(request):
+    if request.method == 'POST':
+        try:
+            # Obtener los datos del formulario
+            nombre_proveedor = request.POST.get('nombreProveedor')
+            id_proveedor = request.POST.get('nitProveedor')
+            telefono_proveedor = request.POST.get('telefonoProveedor')
+            correo_proveedor = request.POST.get('correoProveedor')
+
+            # Crear y guardar el nuevo proveedor
+            nuevo_proveedor = Proveedor(
+                idProveedor=id_proveedor,
+                nombreProveedor=nombre_proveedor,
+                emailProveedor=correo_proveedor,
+                telefonoProveedor=telefono_proveedor
+            )
+            print(nuevo_proveedor)
+            nuevo_proveedor.save()
+
+        except Exception as e:
+            error_message = str(e)
+            print(e)
+            # Manejar el error si es necesario
+    return redirect('adminProductos')  # Redirigir en caso de que no sea un método POST
+
+@staff_member_required
+def editar_proveedor(request):
+    if request.method == 'POST':
+        try:
+            id_proveedor = request.POST.get('nitProveedor')
+            nombre_proveedor = request.POST.get('nombreProveedor')
+            telefono_proveedor = request.POST.get('telefonoProveedor')
+            correo_proveedor = request.POST.get('correoProveedor')
+
+            # Busca la instancia de Proveedor por ID
+            proveedor = Proveedor.objects.get(idProveedor=id_proveedor)
+
+            # Actualiza los campos del proveedor
+            proveedor.idProveedor = id_proveedor
+            proveedor.nombreProveedor = nombre_proveedor
+            proveedor.emailProveedor= correo_proveedor
+            proveedor.telefonoProveedor = telefono_proveedor
+            proveedor.save()  # Guarda los cambios en la base de datos
+
+        except Exception as e:
+            error_message = str(e)
+            # Maneja el mensaje de error aquí si es necesario
+    return redirect('adminProductos')
+
 @staff_member_required
 def crear_producto(request):
     if request.method == 'POST':
@@ -34,18 +88,22 @@ def crear_producto(request):
             nombre_producto = request.POST.get('nombreProducto')
             precio_producto = request.POST.get('precioProducto')
             categoria_id = request.POST.get('categoriaProducto')  # Asumiendo que este es el ID de la categoría
+            proveedor_id = request.POST.get('idProveedor') 
             descripcion_producto = request.POST.get('descripcionProducto')
 
             # Obtener la categoría
             idcategoria = CategoriaProducto.objects.get(idCategoria=categoria_id)
 
+            # Obtener el proveedor
+            idproveedor = Proveedor.objects.get(idProveedor=proveedor_id)
+
             # Crear y guardar el nuevo producto
-            
             nuevo_producto = Producto(
                 nombre=nombre_producto,
                 precio=precio_producto,
                 categoria=idcategoria,
-                descripcion=descripcion_producto
+                descripcion=descripcion_producto,
+                proveedor = idproveedor,
             )
             nuevo_producto.save()
 
@@ -68,6 +126,7 @@ def editar_producto(request):
             id_producto = request.POST.get('idProducto')
             nombre_producto = request.POST.get('nombreProducto')
             id_categoria = request.POST.get('categoriaProducto')  # Obtén el ID de la categoría
+            proveedor_id = request.POST.get('idProveedor')  
             descripcion_producto = request.POST.get('descripcionProducto')
             precio_producto = request.POST.get('precioProducto')
 
@@ -77,11 +136,15 @@ def editar_producto(request):
             # Busca la instancia de CategoriaProducto por ID
             categoria_producto = CategoriaProducto.objects.get(idCategoria=id_categoria)
 
+            # Obtener el proveedor
+            idproveedor = Proveedor.objects.get(idProveedor=proveedor_id)
+
             # Actualiza los campos del producto
             producto.nombre = nombre_producto
             producto.categoria = categoria_producto  # Asigna la instancia de CategoriaProducto
             producto.descripcion = descripcion_producto
             producto.precio = precio_producto
+            producto.idProveedor = idproveedor
 
             producto.save()  # Guarda los cambios en la base de datos
 
@@ -91,6 +154,7 @@ def editar_producto(request):
             error_message = str(e)
             # Maneja el mensaje de error aquí si es necesario
     return redirect('adminProductos')
+
 @staff_member_required
 def editar_categoria(request):
     if request.method == 'POST':
@@ -119,16 +183,18 @@ def tienda(request):
         {'nombre': '$10.000 - $20.000', 'min': 10000, 'max': 20000},
         {'nombre': '$20.000 - $60.000', 'min': 20000, 'max': 60000},
         {'nombre': '$60.000 - $100.000', 'min': 60000, 'max': 100000},
-        {'nombre': 'más $100.000', 'min': 100000, 'max': 1000000000},
+        {'nombre': '> $100.000', 'min': 100000, 'max': 1000000000},
         {'nombre': 'Mostrar todos', 'min': 0, 'max': 999999999999}
     ]
 
-    # Obtener valores de búsqueda de la URL
+    # Obtenemops los valores de busqueda
     min_price = request.GET.get('min_price', 0)
     max_price = request.GET.get('max_price', 999999999999)
     busqueda = request.GET.get('busqueda', '')
-    
-    # Filtrar productos que tengan existencias y que coincidan con la búsqueda
+    categoria_nombre = request.GET.get('categoria', None)
+
+
+    # Filtramos con las busquedas y producto con existencias
     productos = Producto.objects.filter(
         precio__gte=min_price,
         precio__lte=max_price,
@@ -136,8 +202,15 @@ def tienda(request):
          # Filtrar por nombre que contiene la cadena de búsqueda
     ).order_by('nombre')
 
+     # Si hay una busqueda en la barra de busqieda
     if busqueda:
         productos = productos.filter(nombre__icontains=busqueda)
+
+    # Si filtra por categoria   
+    if categoria_nombre:
+        productos = productos.filter(categoria__Nombre=categoria_nombre)
+
+
     print(f'Min Price: {min_price}, Max Price: {max_price}, Búsqueda: {busqueda}')
     # Número de productos por página
     productos_por_pagina = 12
@@ -151,4 +224,4 @@ def tienda(request):
     # Obtenemos los productos de la página actual
     page = paginator.get_page(page_number)
 
-    return render(request, 'tienda.html', {'page': page, 'productos': page, 'precios': precios, 'busqueda': busqueda, 'min_price': min_price, 'max_price': max_price})
+    return render(request, 'tienda.html', {'page': page, 'productos': page, 'precios': precios, 'busqueda': busqueda, 'min_price': min_price, 'max_price': max_price, 'categorias': CategoriaProducto.objects.all()})

@@ -128,21 +128,13 @@
                 <a href="{%url 'tienda'%}">Tienda</a>
             </li>
 
-            <li><a href="licores.html">Licores</a>
-
+            {% for categorias in categorias %}
+            <li class="nav-item">
+                <a href="{% url 'tienda' %}?categoria={{ categoria.Nombre }}" >
+                    {{ categorias.Nombre }}
+                </a>
             </li>
-
-            <li><a href="#">Cervezas</a>
-
-            </li>
-
-            <li><a href="#">Bebidas </a>
-
-            </li>
-
-            <li><a href="#">Gaseosas </a>
-
-            </li>
+            {% endfor %}
             <li class="nav-item "style="position: absolute; right:0.5; margin-top:0.5%;">
                 <h5 style=" color:#ffffff; ">Hola, {{user.nombre}}</h5>
             </li>
@@ -168,24 +160,15 @@
             <li class="menu-item">
                 <a href="{%url 'tienda'%}">Tienda</a>
             </li>
-
-            <li><a href="licores.html">Licores</a>
-
+            {% for categoria in categorias %}
+            <li class="nav-item">
+                <a href="{% url 'tienda' %}?categoria={{ categoria.Nombre }}" >
+                    {{ categoria.Nombre }}
+                </a>
             </li>
-
-            <li><a href="#">Cervezas</a>
-
-            </li>
-
-            <li><a href="#">Bebidas </a>
-
-            </li>
-
-            <li><a href="#">Gaseosas </a>
-
-            </li>
+            {% endfor %}
             
-            
+            C:\Users\USUARIO\Pictures\ivan\Proyecto-Sidim--main\Sidim\templates\navbar.html
            
         </ul>
     </div>

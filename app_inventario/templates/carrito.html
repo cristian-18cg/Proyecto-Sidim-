@@ -35,18 +35,33 @@
                                 </td>
                                 <td>{{ producto.nombre }}</td>
                                 <td>{{ producto.precio }}</td>
-                                <td>
-                                    <div class="input-group input-group-sm"
-                                        style="width: 100%; align-items: center; justify-content: center; background-color: yellow; max-height: 60px;">
-                                        <button class="btn btn-danger btn-minus"
-                                            style="width: 15%; max-height: 30px;">-</button>
-                                        <span class="quantity"
-                                            style="width: 50%; background-color: aquamarine; max-height: 30px;">1</span>
-                                        <button class="btn btn-success btn-plus"
-                                            style="width: 15%; max-height: 30px;">+</button>
+
+                                <td class="text-center">
+                                    <!-- Celda que contiene los botones de cantidad -->
+                                    <div class="input-group input-group-sm" style="text-align: center;">
+                                        <div class="d-flex" style="justify-content: center; align-items: center;">
+                                            <button class="btn2 btn btn-danger btn-minus"
+                                                data-producto-id="{{ producto.idProducto }}"
+                                                data-precio="{{ producto.precio }}"
+                                                style="width: 15%; max-height: 30px;">-</button>
+                                            <span class="quantity" id="quantity_{{ producto.idProducto }}"
+                                                data-producto-id="{{ producto.idProducto }}"
+                                                data-precio="{{ producto.precio }}"
+                                                data-subtotal="{{ producto.precio }}"
+                                                style="min-width:2rem; background-color: aquamarine; max-height: 30px;"
+                                                contenteditable="true"
+                                                oninput="validarCantidad(event, '{{ producto.idProducto }}', '{{ producto.precio }}')">
+                                                {{ producto.cantidad }}</span>
+                                            <button class="btn btn-success btn-plus"
+                                                data-producto-id="{{ producto.idProducto }}"
+                                                data-precio="{{ producto.precio }}"
+                                                style="width: 15%; max-height: 30px;">+</button>
+                                        </div>
                                     </div>
                                 </td>
-                                <td>{{ producto.precio }}</td>
+
+                                <td id="subtotal_{{ producto.idProducto }}" data-subtotal="{{ producto.precio }}">
+                                    {{ producto.subtotal }}</td>
                                 <td>
                                     <a href="{% url 'quitar_del_carrito' producto.idProducto %}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"
@@ -59,16 +74,50 @@
                             </tr>
                             {% endfor %}
                         </tbody>
+
+
                     </table>
                 </div>
             </div>
+            <!-- panel derecho del carrito de compras -->
             <div class="col-md-5" style="background-color: #999009; margin-bottom: 10px;">
-                <a>Prueba</a>
+                <a>Prueba carrito con productos</a>
+                <!-- campos para mostrar el total -->
+                <div class="container-fluid col-md-9" style="background-color: white; margin-top:10%;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="totalLabel">Total:</label>
+                        </div>
+
+                        <div class="col-md-6">
+                            <input id="totalInput" type="text" readonly value="0.00">
+                        </div>
+
+                    </div>
+                </div>
+                <!-- campos para mostrar los botones -->
+                <div class="container-fluid col-md-9" style="background-color: white; margin-top:20%;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6 text-center">
+                                    <a class="btn2 btn btn-primary" href="{% url 'tienda' %}" style=" width:70%">Sigue
+                                        comprando</a>
+                                </div>
+
+                                <div class="col-md-6 text-center">
+                                    <a class="btn btn-car" href=""
+                                        style="background-color:#770000; color: white; width:70%">Confirmar pedido</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         {% else %}
         <div style="text-align: center; justify-content: center;">
-            <div class="container-fluid col-md-9" style="background-color: gray;">
+            <div class="container-fluid col-md-9" style="background-color: white; margin-top:10%;">
                 <div class="text-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="106" height="106" fill="currentColor"
                         class="bi bi-cart4" viewBox="0 0 16 16">
@@ -79,17 +128,146 @@
                 <div class="text-center">
                     <h1 class="">Tu carrito está vacío</h1><span class="">En Sidim tenemos más de 100 productos para
                         que elijas lo que más te gusta.</span>
-                    <div class="text-center"><a href="/" data-atom-link="true">
-                            <span data-atom-link-span="true"></span>
-                            <span class="" href="{% url 'tienda' %}">Sigue comprando</span></a>
+                    <div class="text-center">
+                        <span data-atom-link-span="true"></span>
+                        <a class="btn btn-car" href="{% url 'tienda' %}"
+                            style="background-color:#770000; color: white; width:20%">Sigue comprando</a>
                     </div>
                 </div>
-            </div>
-            <div class="container-fluid col-md-3" style="background-color: #999009;">
-                <a>Prueba</a>
             </div>
         </div>
         {% endif %}
     </div>
 </div>
+
+<script>
+    var carritoData = {
+        productos: [],
+        total: 0
+    };
+    // Llama a actualizarTotal cuando se carga la página
+    window.onload = function () {
+        // Calcular y mostrar los subtotales al cargar la página
+        const productos = document.querySelectorAll('[id^="quantity_"]');
+        productos.forEach(producto => {
+            const productoId = producto.getAttribute('data-producto-id');
+            const precio = parseFloat(producto.getAttribute('data-precio'));
+            const cantidad = parseInt(producto.innerText);
+            const subtotal = cantidad * precio;
+
+            // Actualiza el subtotal en la columna correspondiente
+            const subtotalElement = document.getElementById('subtotal_' + productoId);
+            subtotalElement.innerText = subtotal.toFixed(2);
+            // Actualiza el objeto carritoData con la información del producto
+            const productoIndex = carritoData.productos.findIndex(p => p.id === productoId);
+            if (productoIndex !== -1) {
+                carritoData.productos[productoIndex].cantidad = cantidad;
+                carritoData.productos[productoIndex].subtotal = subtotal;
+            } else {
+                carritoData.productos.push({
+                    idProducto: productoId,
+                    cantidad: cantidad,
+                    subtotal: subtotal
+                });
+            }
+        });
+
+        // Actualiza el total después de calcular los subtotales iniciales
+        actualizarTotal();
+        console.log(carritoData);
+    };
+
+    // Event listener para todos los botones
+    document.addEventListener('click', function (event) {
+        const target = event.target;
+
+        // Verifica si el clic fue en un botón de incrementar o disminuir
+        if (target.classList.contains('btn-minus') || target.classList.contains('btn-plus')) {
+            const productoId = target.getAttribute('data-producto-id');
+            const precio = parseFloat(target.getAttribute('data-precio'));
+
+            // Llama a la función modificarCantidad según sea necesario
+            modificarCantidad(productoId, target.classList.contains('btn-minus') ? -1 : 1, precio);
+        }
+    });
+
+    function modificarCantidad(productoId, cantidad, precioUnitario) {
+        const quantityElement = document.getElementById('quantity_' + productoId);
+
+        let currentQuantity = parseInt(quantityElement.innerText);
+
+        // Asegúrate de que la cantidad no sea menor que 1 si intenta disminuir
+        if (cantidad === -1 && currentQuantity > 1) {
+            currentQuantity += cantidad;
+        } else if (cantidad === 1) {
+            currentQuantity += cantidad;
+        }
+
+        // Actualiza la cantidad
+        quantityElement.innerText = currentQuantity;
+
+        // Calcula y actualiza el subtotal
+        calcularSubtotal(productoId, parseFloat(precioUnitario));
+
+        const productoIndex = carritoData.productos.findIndex(p => p.id === productoId);
+        if (productoIndex !== -1) {
+            carritoData.productos[productoIndex].cantidad = currentQuantity;
+            carritoData.productos[productoIndex].subtotal = currentQuantity * precioUnitario;
+        } else {
+            carritoData.productos.push({
+                idProducto: productoId,
+                cantidad: currentQuantity,
+                subtotal: currentQuantity * precioUnitario
+            });
+        }
+
+        console.log(carritoData);
+        // Actualiza el total después de cada cambio
+        actualizarTotal();
+    }
+
+    function calcularSubtotal(productoId, precioUnitario) {
+        const quantityElement = document.getElementById('quantity_' + productoId);
+        const subtotalElement = document.getElementById('subtotal_' + productoId);
+
+        let cantidad = parseInt(quantityElement.innerText);
+
+        // Calcula el subtotal
+        let subtotal = cantidad * precioUnitario;
+
+        // Actualiza el subtotal en la columna correspondiente
+        subtotalElement.innerText = subtotal.toFixed(2);
+    }
+
+    // Función para calcular y actualizar el total
+    function actualizarTotal() {
+        const subtotales = document.querySelectorAll('[id^="subtotal_"]');
+        let total = 0;
+
+        subtotales.forEach(subtotal => {
+            total += parseFloat(subtotal.innerText);
+        });
+
+        // Actualiza el valor del input del total
+        document.getElementById('totalInput').value = total.toFixed(2);
+        carritoData.total = total;
+        $.ajax({
+            url: '{% url "actualizar_carrito" %}',  // Ajusta la URL a tu configuración
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'  // Asegúrate de incluir el token CSRF en la solicitud
+            },
+            data: JSON.stringify({ carrito_data: carritoData }),
+            success: function (data) {
+                // Maneja la respuesta según tus necesidades
+                console.log(data);
+            },
+            error: function (error) {
+                console.log('Error en la solicitud AJAX: ' + error);
+            }
+        });
+    }
+</script>
+
 {% endblock %}

@@ -1,20 +1,6 @@
 from django.db import models
 from Sidim.models import Usuarios
-from app_productos.models import Producto
-
-class Proveedor(models.Model):
-    idProveedor = models.AutoField(primary_key=True)
-    nombreProveedor = models.CharField(max_length=45, unique=False)
-    emailProveedor = models.EmailField(max_length=45)
-    telefonoProveedor = models.CharField(max_length=15)
-
-    def __str__(self):
-        return self.nombreProveedor
-
-    class Meta:
-        verbose_name_plural = "Proveedores"
-
-from django.db import models
+from app_productos.models import Producto, Proveedor
 
 # Modelo para TipoTransaccion (Entrada/Salida)
 class TipoTransaccion(models.Model):
@@ -41,27 +27,35 @@ class SubtipoTransaccion(models.Model):
         verbose_name = "Subtipo de Transacción"
         verbose_name_plural = "Subtipos de Transacción"
 
-# Modelo para Transaccion
 class Transaccion(models.Model):
+    ESTADO_CHOICES = [
+        ('P', 'Pendiente'),
+        ('C', 'Cancelada'),
+        ('E', 'Exitosa'),
+    ]
+
     idTransaccion = models.AutoField(primary_key=True)
     subtipo = models.ForeignKey(SubtipoTransaccion, on_delete=models.CASCADE)
     fecha = models.DateTimeField()
     idUsuario = models.ForeignKey(Usuarios, on_delete=models.SET_NULL, null=True, blank=True)
     idProveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True, blank=True)
     valorTotal = models.DecimalField(max_digits=10, decimal_places=0)
+    estado = models.CharField(max_length=1, choices=ESTADO_CHOICES, default='P')  # Agregado campo 'estado'
 
     def __str__(self):
-        return f"Transacción #{self.idTransaccion}"
+        return f"Transacción #{self.idTransaccion} - {self.get_estado_display()}"  # Mostrar nombre del estado en lugar de la abreviatura
 
     class Meta:
         verbose_name = "Transacción"
         verbose_name_plural = "Transacciones"
+
 
 class DetalleTransaccion(models.Model):
     idDetalle = models.AutoField(primary_key=True)
     idTransaccion = models.ForeignKey(Transaccion, on_delete=models.CASCADE)
     idProducto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
+    precioUnidad = models.DecimalField(max_digits=10, decimal_places=0)
     fechaVencimiento = models.DateField()
     precio = models.DecimalField(max_digits=10, decimal_places=0)
 

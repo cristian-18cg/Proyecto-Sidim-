@@ -1,4 +1,3 @@
-
 <h1>Registro de Entrada</h1>
 <form method="POST" action="{% url 'registrar_entrada' %}" id="registroCompra">
     {% csrf_token %}
@@ -27,7 +26,8 @@
             <select name="idProveedor" id="idProveedor" class="form-control2" required>
                 <option value="">Seleccionar Proveedor</option>
                 {% for proveedor in proveedores %}
-                <option value="{{ proveedor.idProveedor }}">{{ proveedor.nombreProveedor }}</option>
+                <option value="{{ proveedor.idProveedor }}" data-proveedor="{{ proveedor.idProveedor }}">
+                    {{ proveedor.nombreProveedor }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -52,13 +52,20 @@
                 <select name="producto_1" id="producto_1" class="form-control2">
                     <option value="">Seleccionar Producto</option>
                     {% for producto in productos %}
+                    {% if producto.idProveedor == proveedor.idProveedor %}
                     <option value="{{ producto.idProducto }}" data-precio="{{ producto.precio }}">{{ producto.nombre }}
                     </option>
+                    {% endif %}
                     {% endfor %}
                 </select>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
+                <label for="precio_unidad_1">Precio Unitario</label>
+                <input type="number" name="precio_unidad_1" id="precio_unidad_1" class="form-control2">
+            </div>
+
+            <div class="col-md-1">
                 <label for="cantidad_1">Cantidad</label>
                 <input type="number" name="cantidad_1" id="cantidad_1" class="form-control2">
             </div>
@@ -78,7 +85,8 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <!-- Botón para agregar más detalles de entrada -->
-            <button type="button" class="btn2 btn btn-primary" style="max-width: 70%;"id="agregar_detalle">Agregar Detalle</button>
+            <button type="button" class="btn2 btn btn-primary" style="max-width: 70%;" id="agregar_detalle">Agregar
+                Detalle</button>
         </div>
 
         <div class="col-md-6">
@@ -89,25 +97,24 @@
 </form>
 
 <script>
-    // Código JavaScript para agregar dinámicamente detalles de entrada
     let detalleCounter = 1;
     let valorTotal = 0;
 
     function calcularTotal(detalleCounter) {
         const cantidadInput = document.getElementById(`cantidad_${detalleCounter}`);
-        const precioSelect = document.getElementById(`producto_${detalleCounter}`);
+        const precio_UnidadInput = document.getElementById(`precio_unidad_${detalleCounter}`);
         const totalInput = document.getElementById(`total_${detalleCounter}`);
 
         cantidadInput.addEventListener('input', () => {
             const cantidad = parseFloat(cantidadInput.value);
-            const precio = parseFloat(precioSelect.options[precioSelect.selectedIndex].getAttribute('data-precio'));
+            const precio = parseFloat(precio_UnidadInput.value);
 
             if (!isNaN(cantidad) && !isNaN(precio)) {
                 const total = cantidad * precio;
                 totalInput.value = total.toFixed(2);
                 actualizarValorTotal();
             } else {
-                totalInput.value = '';
+                totalInput.value = '0';
             }
         });
     }
@@ -122,94 +129,102 @@
             }
         });
 
-        // Mostrar el valor total en el campo "valor_total"
         document.getElementById('valor_total').value = valorTotal.toFixed(2);
     }
 
-    document.getElementById('agregar_detalle').addEventListener('click', () => {
+    function actualizarProductos(selectProducto, proveedorSeleccionado) {
+        selectProducto.innerHTML = '<option value="">Seleccionar Producto</option>';
+
+        {% for producto in productos %}
+        if ("{{ producto.idProveedor_id }}" == proveedorSeleccionado) {
+            const option = document.createElement('option');
+            option.value = "{{ producto.idProducto }}";
+            option.text = "{{ producto.nombre }}";
+            selectProducto.appendChild(option);
+        }
+        {% endfor %}
+    }
+
+    function eliminarDetalle(detalleCounter) {
+        const detalleContainer = document.getElementById('detalle_entrada_1');
+        const detalle = document.getElementById(`detalle_${detalleCounter}`);
+        
+        // Imprime en la consola para verificar si se está llamando
+        console.log(`Eliminar detalle ${detalleCounter}`);
+
+        // Eliminar el detalle del contenedor si se encuentra
+        if (detalle) {
+            detalleContainer.removeChild(detalle);
+
+            // Recalcular el valor total después de eliminar el detalle
+            actualizarValorTotal();
+        } else {
+            console.error(`No se encontró el detalle ${detalleCounter}`);
+        }
+    }
+
+
+    function agregarNuevoDetalle() {
         detalleCounter++;
-        const detalleHtml = `
-            <div class="row mb-3">
-                <div class="col-md-3">
-                    <label for="producto_${detalleCounter}">Producto</label>
-                    <select name="producto_${detalleCounter}" id="producto_${detalleCounter}" class="form-control">
-                        <option value="">Seleccionar Producto</option>
-                        {% for producto in productos %}
-                            <option value="{{ producto.idProducto }}" data-precio="{{ producto.precio }}">{{ producto.nombre }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+        const detalleContainer = document.getElementById('detalle_entrada_1');
 
-                <div class="col-md-3">
-                    <label for="cantidad_${detalleCounter}">Cantidad</label>
-                    <input type="number" name="cantidad_${detalleCounter}" id="cantidad_${detalleCounter}" class="form-control" oninput="calcularTotal(${detalleCounter})">
-                </div>
-
-                <div class="col-md-3">
-                    <label for="fecha_${detalleCounter}">Fecha de Vencimiento</label>
-                    <input type="date" name="fecha_${detalleCounter}" id="fecha_${detalleCounter}" class="form-control" required>
-                </div>
-
-                <div class="col-md-3">
-                    <label for="total_${detalleCounter}">Precio Total</label>
-                    <input type="number" name="total_${detalleCounter}" id="total_${detalleCounter}" class="form-control" readonly>
-                </div>
+        const nuevoDetalle = document.createElement('div');
+        nuevoDetalle.classList.add('row', 'mb-3');
+        nuevoDetalle.innerHTML = `
+            <div class="col-md-3">
+                <select name="producto_${detalleCounter}" id="producto_${detalleCounter}" class="form-control2"></select>
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="precio_unidad_${detalleCounter}" id="precio_unidad_${detalleCounter}" class="form-control2" required>
+            </div>
+            <div class="col-md-1">
+                <input type="number" name="cantidad_${detalleCounter}" id="cantidad_${detalleCounter}" class="form-control2" oninput="calcularTotal(${detalleCounter})">
+            </div>
+            <div class="col-md-3">
+                <input type="date" name="fecha_${detalleCounter}" id="fecha_${detalleCounter}" class="form-control2" required>
+            </div>
+            <div class="col-md-3">
+                <input type="number" name="total_${detalleCounter}" id="total_${detalleCounter}" class="form-control2" readonly>
+                <a href="#" onclick="eliminarDetalle(${detalleCounter})">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                    </svg>
+                </a>
             </div>`;
 
-        const detalleContainer = document.getElementById('detalle_entrada_1');
-        const newDetalle = document.createElement('div');
-        newDetalle.innerHTML = detalleHtml;
-        detalleContainer.appendChild(newDetalle);
+        detalleContainer.appendChild(nuevoDetalle);
+        const nuevoSelectProducto = document.getElementById(`producto_${detalleCounter}`);
+
+        // Obtener el proveedor seleccionado actualmente
+        const proveedorSeleccionado = document.getElementById('idProveedor').value;
+
+        // Actualizar productos para el nuevo detalle
+        actualizarProductos(nuevoSelectProducto, proveedorSeleccionado);
 
         // Calcular total para el nuevo detalle
         calcularTotal(detalleCounter);
+    }
+
+    document.getElementById('agregar_detalle').addEventListener('click', () => {
+        agregarNuevoDetalle();
+    });
+
+    document.getElementById('idProveedor').addEventListener('change', () => {
+        // Obtener el proveedor seleccionado
+        const proveedorSeleccionado = document.getElementById('idProveedor').value;
+
+        // Actualizar productos para todos los detalles
+        for (let i = 1; i <= detalleCounter; i++) {
+            const selectProducto = document.getElementById(`producto_${i}`);
+            actualizarProductos(selectProducto, proveedorSeleccionado);
+        }
     });
 
     // Calcular total para el primer detalle
     calcularTotal(detalleCounter);
-
-    function validarFecha() {
-        const fechaInput = document.getElementById('fechaIngreso'); // Cambia a la primera fecha
-        const fechaActual = new Date();
-
-        // Calcula la fecha máxima permitida (una semana hacia atrás)
-        const fechaMaxima = new Date(fechaActual);
-        fechaMaxima.setDate(fechaMaxima.getDate() - 7);
-
-        const fechaSeleccionada = new Date(fechaInput.value + 'T00:00');
-
-        if (isNaN(fechaSeleccionada) || fechaSeleccionada > fechaActual || fechaSeleccionada < fechaMaxima) {
-            alert(`La fecha en el campo ${fechaInput.previousElementSibling.textContent} debe estar dentro de la última semana.`);
-            fechaInput.value = '';
-        }
-    }
-
-    // Agrega el evento blur solo al campo de fecha_1
-    const fechaInput = document.getElementById('fechaIngreso');
-    fechaInput.addEventListener('blur', validarFecha);
-
-    // Función para validar la fecha de vencimiento de los detalles
-    function validarFechaVencimiento(detalleCounter) {
-        const fechaVencimientoInput = document.getElementById(`fecha_${detalleCounter}`);
-        const fechaActual = new Date();
-
-        // Calcula la fecha mínima permitida (6 meses en el futuro)
-        const fechaMinima = new Date(fechaActual);
-        fechaMinima.setMonth(fechaMinima.getMonth() + 6);
-
-        const fechaSeleccionada = new Date(fechaVencimientoInput.value + 'T00:00');
-
-        if (isNaN(fechaSeleccionada) || fechaSeleccionada < fechaMinima) {
-            alert(`La fecha de vencimiento en el detalle ${detalleCounter} debe ser al menos 6 meses en el futuro.`);
-            fechaVencimientoInput.value = '';
-        }
-    }
-
-    // Agrega el evento blur a todos los campos de fecha de vencimiento
-    for (let i = 1; i <= detalleCounter; i++) {
-        const fechaVencimientoInput = document.getElementById(`fecha_${i}`);
-        fechaVencimientoInput.addEventListener('blur', () => {
-            validarFechaVencimiento(i);
-        });
-    }
+    // Actualizar productos para el primer detalle
+    const primerSelectProducto = document.getElementById(`producto_${detalleCounter}`);
+    const primerProveedorSeleccionado = document.getElementById('idProveedor').value;
+    actualizarProductos(primerSelectProducto, primerProveedorSeleccionado);
 </script>

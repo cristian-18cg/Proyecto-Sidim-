@@ -6,26 +6,50 @@
 
 <div class="container" style="min-width:95%">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="card">
-                <div class="card-header">
-                    <h5 style="color:#770000!important">Filtrar por precio</h5>
+                <div class="card-header " style="background-color: rgb(255, 255, 255); ">
+                    <h4 style="color:#770000">Filtros</h4>
                 </div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        {% for precio in precios %}
-                        <li class="list-group-item">
-                            <a href="?min_price={{ precio.min }}&max_price={{ precio.max }}" style="color:black">
-                                {{ precio.nombre }}
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
+                <div class="card-body center">
+                    <h5>Precios</h5>
+                    <form method="get" id="priceFilterForm">
+                        <ul class="list-group">
+                            {% for precio in precios %}
+                                <li class="list-group-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="selected_prices[]" value="{{ precio.nombre }}" id="precio{{ loop.index }}" data-min="{{ precio.min }}" data-max="{{ precio.max }}">
+                                        <label class="form-check-label" for="precio{{ loop.index }}">
+                                            {{ precio.nombre }}
+                                        </label>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                            <li class="list-group-item">
+                                <button type="button" class="btn btn-primary" onclick="filterPrices()">Filtrar</button>
+                            </li>
+                        </ul>
+                    </form>
+                   
+                    
+                    <h5 class="">Categoría</h5>
+                    <form method="get" action="{% url 'tienda' %}">
+                        <label for="categoria">Selecciona una categoría:</label>
+                        <select name="categoria" id="categoria" class="form-control">
+                            <option value="" {% if not categoria_nombre %}selected{% endif %}>Todas las categorías</option>
+                            {% for categoria in categorias %}
+                                <option value="{{ categoria.Nombre }}" {% if categoria.Nombre == categoria_nombre %}selected{% endif %}>{{ categoria.Nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" class="btn btn-primary" value="Filtrar">
+                    </form>
+                
                 </div>
+              
             </div>
         </div>
-        <div class="col-md-9">
-            <div class="row card-container" style="padding-top:5%">
+        <div class="col-md-10">
+            <div class="row card-container">
                 <!-- for que muestra los productos por medio de la vista -->
                 {% for producto in page %}
                 <div class="col-md-3">
@@ -85,4 +109,31 @@
         </div>
     </div>
 </div>
+
+<script>
+    function filterPrices() {
+        var form = document.getElementById('priceFilterForm');
+        var checkboxes = form.querySelectorAll('input[name="selected_prices[]"]');
+        var selectedCheckbox = Array.from(checkboxes).find(checkbox => checkbox.checked);
+
+        if (selectedCheckbox) {
+            var minPrice = selectedCheckbox.dataset.min;
+            var maxPrice = selectedCheckbox.dataset.max;
+
+            // You can now use minPrice and maxPrice as needed.
+            // For example, you can update the URL and submit the form.
+            var url = `?min_price=${minPrice}&max_price=${maxPrice}`;
+            window.location.href = url;
+        }
+    }
+
+    // Agregar un listener para desmarcar los otros checkboxes al seleccionar uno.
+    document.getElementById('priceFilterForm').addEventListener('change', function(event) {
+        var checkboxes = event.target.form.querySelectorAll('input[name="selected_prices[]"]');
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = false; // Desmarcar todos los checkboxes
+        });
+        event.target.checked = true; // Marcar el checkbox seleccionado
+    });
+</script>
 {% endblock %}

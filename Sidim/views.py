@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout,authenticate, update_session_auth_hash
-from .form import UsuariosCreationForm, LoginForm, CustomPasswordResetForm,CustomPasswordResetForm, CustomSetPasswordForm
+from .form import UsuariosCreationForm,  CustomPasswordResetForm,CustomPasswordResetForm, CustomSetPasswordForm
 from .models import Usuarios
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail, BadHeaderError
-
+from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.forms import SetPasswordForm
@@ -17,11 +17,10 @@ from django.views import View
 from django.http import HttpRequest
 from django.contrib.auth.views import PasswordResetConfirmView
 
-def form_registro(request):
-    return {'form_registro': UsuariosCreationForm()}
-
+def error_404 (request,exception):
+    return render(request,'404.html',status=404)
 def home(request):
-   
+ 
    if request.method == 'POST':
     action = request.POST.get('action')
     
@@ -55,23 +54,14 @@ def home(request):
 
    return render(request, 'home.html', {'form_registro': form_registro})
 
+
+       
+
 def cerrarsesion(request):
   logout(request)
   return redirect('home')
 
-def iniciarsesion(request):
- if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            correo = form.cleaned_data['correo']
-            password = form.cleaned_data['password']
-            user = authenticate(request, correo=correo, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('dashboard')  # Cambia 'dashboard' a la URL deseada después de iniciar sesión
- else:
-        form = LoginForm()
- return render(request, 'home.html', {'form': form})
+
 
 @login_required 
 def perfil(request):
@@ -132,6 +122,7 @@ def cambiar_contrasena(request):
             messages.error(request, 'Hubo un error al cambiar la contraseña. Asegúrate de ingresar la contraseña actual correctamente y de que las nuevas contraseñas coincidan.')
 
     return render(request, 'profile.html')
+ 
 
 
 class CustomPasswordResetView(View):
@@ -151,19 +142,19 @@ class CustomPasswordResetView(View):
             try:
                 user = User.objects.get(correo=correo)
             except User.DoesNotExist:
-                messages.error(request, 'No hay ninguna cuenta asociada a este correo electrónico.')
-                return redirect('password_reset_form')  # Reemplaza con la URL de tu página de error
+                form.add_error('correo', "No hay ninguna cuenta asociada a este correo electrónico.")
+                return render(request, self.template_name, {'form': form})
 
             # Genera el token de reinicio de contraseña
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-            # Construye la URL completa para restablecer la contraseña
+            # Construye la url que para restablecer la contraseña
             reset_url = request.build_absolute_uri(
                 reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
             )
 
-            # Intenta enviar el correo electrónico
+            # Intentamos enviar el correo
             try:
                 send_mail(
                     'Reestablecimiento de contraseña SIDIM',
@@ -181,36 +172,51 @@ class CustomPasswordResetView(View):
 
         return render(request, self.template_name, {'form': form})
 
-class CustomPasswordResetConfirmView(PasswordResetConfirmView):
-    template_name = 'registration/password_reset_confirm.html'
-    success_url = reverse_lazy('password_reset_complete')
-    form_class = CustomSetPasswordForm
-
-    def get_user(self, uidb64):
+class CustomPasswordResetConfirmView(View):
+    
+    def get(self, request, uidb64, token):
         try:
-            uid = urlsafe_base64_decode(uidb64).decode('utf-8')
-            user = get_user_model().objects.get(pk=uid)
-            return user
-        except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist, UnicodeDecodeError):
-            return None
+            uid = force_str(urlsafe_base64_decode(uidb64))
+            usuario = Usuarios.objects.get(pk=uid)
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        uidb64 = self.kwargs['uidb64']
-        token = self.kwargs['token']
+            if default_token_generator.check_token(usuario, token):
+                form = CustomSetPasswordForm(usuario)
+                return render(request, 'registration/password_reset_confirm.html', {'form': form})
+            else:
+                return render(request, 'token_invalido.html')
+        except (TypeError, ValueError, OverflowError, Usuarios.DoesNotExist):
+            usuario = None
+        
+        return render(request, 'error.html')
 
-        user = self.get_user(uidb64)
-        if user is not None and default_token_generator.check_token(user, token):
-            kwargs['user'] = user
-        else:
-            messages.error(self.request, 'El enlace de restablecimiento de contraseña no es válido.')
-            return {}
+    def post(self, request, uidb64, token):
+        try:
+            uid = force_str(urlsafe_base64_decode(uidb64)) # se decodifica el token
+            usuario = Usuarios.objects.get(pk=uid) #buscamos el usuario
+
+            if default_token_generator.check_token(usuario, token):
+                form = CustomSetPasswordForm(usuario, request.POST)
+                if form.is_valid():
+                    new_password1 = form.cleaned_data['new_password1']# se verifica la contraseña
+                  
+                    usuario.set_password(new_password1)
+                    usuario.save() #se carga la nueva contra
+               
+                    return redirect('password_reset_complete')
+                else: 
+                    print(form.errors)
+                    return render(request, 'registration/password_reset_confirm.html', {'form': form})
+            else:
+                return render(request, 'token_invalido.html')
+        except (TypeError, ValueError, OverflowError, Usuarios.DoesNotExist) as e:
+            print(e)
+            usuario = None
+            return render(request, 'error.html')
+        
 
         return kwargs
 
     def form_valid(self, form):
-        # Puedes acceder a los campos específicos de tu modelo de usuario personalizado aquí
-        # Ejemplo: form.cleaned_data['user'].nombre
         login(self.request, form.user)
         return super().form_valid(form)
 

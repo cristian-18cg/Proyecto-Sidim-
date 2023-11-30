@@ -1,7 +1,7 @@
 {% load static %}
 {% load custom_filters %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -16,7 +16,7 @@
 
 <body>
     <header>
-        {% include 'navbar.html' %}
+        {% include 'navbar.html' with categorias=categorias %}
     </header>
     <!-- Error General -->
     <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true"
@@ -28,7 +28,7 @@
                     <h5 class="modal-title " id="errorModalLabel" style="margin-left: 45%; margin-top: 1%;">Error</h5>
                 </div>
                 <div class="modal-body">
-                    <p id="errorMessage" class="mb-0" style="margin-left: 20%;"></p>
+                    <p id="errorMessage" class="mb-0" style="justify-content: center;align-items: center;   "></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -41,48 +41,55 @@
     <!-- Ventana modal login -->
     <div class="modal-side" id="loginModal">
         <div class="modal-content">
-
-
             <button class="boton close" data-dismiss="modal"
                 style="   background-color: #bdbdbda7;border-color: #0000003b;border-radius: 20%!important;max-width:1.5rem;">
                 <span aria-hidden="true">&times;</span>
             </button>
 
-            <div class="modal-header" style="text-align: center!important;">
-                <h2 style="margin-left: 18%;">Iniciar sesión</h2>
+            <div class="modal-header"
+                style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                <h2>Iniciar sesión</h2>
             </div>
-            <div class="modal-body">
+
+            <div class="modal-body"
+                style="flex-direction: column; align-items: center; text-align: center; min-width: 95%;">
                 <!-- Formulario de inicio de sesión -->
+
                 <form method="post" action="{% url 'home' %}" name="login">
                     {% csrf_token %}
-                    <label for="login-correo">Email</label>
+                    <div style="text-align: left;">
+                        <label for="login-correo">Email</label>
+                    </div>
                     <input type="email" class="form-control" id="login-correo" name="correo"
                         placeholder="Correo electrónico" required>
-                    <label for="login-password" style="padding-top:3% ;">Password</label>
+                    <div style="text-align: left; padding-top: 3%;">
+                        <label for="login-password">Contraseña</label>
+                    </div>
                     <input type="password" class="form-control" id="login-password" name="password" required>
-                    <button type="submit" class="btn btn-primary" name="action" value="login"
-                        style="margin-left:20%!important">Login</button>
+                    <button type="submit" class="btn btn-primary" name="action" value="login">Login</button>
                 </form>
-                <div style="margin-left: 10%!important;">
-                    <div class="d-flex align-items-center">
-                        <div>
-                            <p class="mb-0">¿No tienes cuenta?</p>
-                        </div>
+                <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <p class="mb-0">¿No tienes cuenta?</p>
                         <div style="margin-left: 10px;">
-                            <a id="registerLink" class="link-opacity-100" href="#" style="color: rgb(0, 0, 0); font-weight: bold;">Regístrate</a>
+                            <a id="registerLink" class="link-opacity-100" href="#"
+                                style="color: rgb(0, 0, 0); font-weight: bold;">Regístrate</a>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center">
-                        <a id="olvidocontra" class="link-opacity-100" href="{% url 'password_reset' %}" style="color: rgb(0, 0, 0); font-weight: bold;">
+                    <div>
+                        <a id="olvidocontra" class="link-opacity-100" href="{% url 'password_reset' %}"
+                            style="color: rgb(0, 0, 0); font-weight: bold;">
                             ¿Se te olvidó la contraseña?
                         </a>
                     </div>
                 </div>
-                
 
 
 
-                
+
+
+
+
 
             </div>
 
@@ -101,16 +108,17 @@
                 <span aria-hidden="true">&times;</span>
             </button>
 
-            <div class="modal-header">
-                <h2 class="modal-login" style="margin-left: 28%;">Registro</h2>
+            <div class="modal-header"
+                style="flex-direction: column; align-items: center; text-align: center; min-width: 95%;">
+                <h2 class="modal-login">Registro</h2>
             </div>
             <div class="modal-body ">
                 <!-- Formulario de registro -->
-                <form action="{% url 'home' %}" method="post" class="my-form ">
+                <form action="{% url 'home' %}" method="post" class="my-form" name="register">
                     {% csrf_token %}
                     {{form_registro.as_p}}
 
-                    <button type="submit" class="btn btn-primary " name="action" value="register" id="registerButton"
+                    <button type="submit" class="btn btn-primary " name="action" value="register" id="register"
                         style="margin-left:20%!important">Registrarse</button>
                 </form>
                 <div>
@@ -125,6 +133,7 @@
 
     {% block content %}
 
+
     {% endblock %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -135,13 +144,13 @@
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header" >
+                <div class="modal-header">
                     <h2 class="modal-title" id="successModalLabel" style="margin-left: 30%;">Bienvenido</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body2">
                     {{ registrado_mensaje }}
-                    
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -156,6 +165,7 @@
         });
     </script>
     {% endif %}
+
     {% if error %}
     <script>
         // Muestra el modal y establece el mensaje de error

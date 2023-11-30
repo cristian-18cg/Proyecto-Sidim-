@@ -16,7 +16,10 @@
 }
  /*************************************/
 
-
+h3 {
+    margin-top: 0!important;
+    color: #333;
+	}
 
 
 
@@ -40,6 +43,9 @@
 
 
 }
+h3{
+    margin-right: 0%;
+}
 
 /* Cambiar el estilo del checkbox cuando está marcado */
 .form-check-input[type="checkbox"] {
@@ -56,11 +62,6 @@
 }
 
 /* Cambiar el estilo del checkbox en estado hover */
-.form-check-input:hover {
-    border-color: #ffffff;
-    /* Cambia el color del borde en estado hover */
-    box-shadow: none;
-}
 
  /****************************************************************************************/
 
@@ -260,12 +261,7 @@
     background-color: #f2f2f2;
     padding: 20px 0;
 }
-h3 {
-    font-size: 16px;
-    margin-top: 150%;
 
-    margin-right: 100%;
-}
 
 
  /*************************************/

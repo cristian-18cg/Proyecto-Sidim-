@@ -16,6 +16,15 @@
     </select>
 </div>
 <div class="form-group">
+    <label for="idProveedor">idProveedor</label>
+    <select class="form-control" id="idProveedor" name="idProveedor" required>
+        <option value="" selected disabled>Seleccione un proveedor</option>
+        {% for proveedor in proveedores %}
+        <option value="{{ proveedor.idProveedor }}">{{ proveedor.nombreProveedor }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="form-group">
     <label for="descripcionProducto">Descripción</label>
     <textarea class="form-control" id="descripcionProducto" name="descripcionProducto"></textarea>
 </div>

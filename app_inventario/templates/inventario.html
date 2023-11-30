@@ -9,6 +9,7 @@
         <thead>
             <tr>
                 <th style="width: 10%;">Número de Registro</th>
+                <th style="width: 10%;">idProducto</th>
                 <th style="width: 20%;">Producto</th>
                 <th style="width: 10%;">Cantidad</th>
                 <th style="width: 10%;">Precio x Unidad</th>
@@ -20,9 +21,10 @@
             {% for existencia in existencias %}
             <tr>
                 <td>{{ existencia.idExistencia }}</td>
+                <td>{{ existencia.idProducto.idProducto }}</td>
                 <td>{{ existencia.idProducto.nombre }}</td>
                 <td>{{ existencia.cantidad }}</td>
-                <td style="text-align: right;">{{ existencia.idProducto.precio|floatformat:2 }}</td>
+                <td >{{ existencia.idProducto.precio|floatformat:0}}</td>
                 <td>{{ existencia.fechaLlegada|date:"d-m-Y" }}</td>
                 <td>{{ existencia.fechaVencimiento|date:"d-m-Y" }}</td>
             </tr>
