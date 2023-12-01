@@ -1,5 +1,5 @@
 {% load static %}
-{% load static %}
+
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #9b9797">
     <div class="container-fluid">
@@ -14,7 +14,7 @@
             style="font-size: 1.2rem; margin-left:3%;">
             <form class="d-flex" method="get" action="{% url 'tienda' %}">
                 <input class="form-control me-2 " type="search" placeholder="Buscar" aria-label="Buscar"
-                    style="margin-top:5%;min-width:80%"  name="busqueda">
+                    style="margin-top:5%;min-width:80%" name="busqueda">
                 <button class="btn btn-primary" type="submit">Buscar</button>
             </form>
         </div>
@@ -70,12 +70,12 @@
     </div>
 </nav>
 
-{% if user.is_staff %}
-<!-- Navbar para empleados (is_staff)-->
-<div class="menu-bar-wrapper">
+<!--{% if user.is_staff %}
+ Navbar para empleados (is_staff)
+<div class="menu-bar-wrapper ">
     <div class="menu-bar">
         <ul class="submenu" style="width: 100%;">
-            <li class="" style="max-width:40%;margin-left:3rem;">
+            <li class="menu-item" style="max-width:20%;margin-left:3rem;">
                 <span class="text-light">
                     <a href="{% url 'home' %}">
                         <svg class="custom-icon" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
@@ -106,7 +106,7 @@
                 <a href="{% url 'Permisos' %}"> Permisos</a>
             </li>
             {% endif %}
-            <li class="nav-item "style="position: absolute; right:0.5; margin-top:0.5%;">
+            <li class="nav-item " style="position: absolute; right:0.5; margin-top:0.5%;">
                 <h5 style=" color:#ffffff; ">Hola, {{user.nombre}}</h5>
             </li>
         </ul>
@@ -114,7 +114,7 @@
 </div>
 
 {% elif user.is_authenticated %}
-<!-- Navbar para Clientes (no is_staff)-->
+ Navbar para Clientes (no is_staff)
 <div class="menu-bar-wrapper">
     <div class="menu-bar">
         <ul class="submenu" style="width: 100%;">
@@ -135,15 +135,15 @@
 
             {% for categorias in categorias %}
             <li class="nav-item">
-                <a href="{% url 'tienda' %}?categoria={{ categoria.Nombre }}" >
+                <a href="{% url 'tienda' %}?categoria={{ categoria.Nombre }}">
                     {{ categorias.Nombre }}
                 </a>
             </li>
             {% endfor %}
-            <li class="nav-item "style="position: absolute; right:0.5; margin-top:0.5%;">
+            <li class="nav-item " style="position: absolute; right:0.5; margin-top:0.5%;">
                 <h5 style=" color:#ffffff; ">Hola, {{user.nombre}}</h5>
             </li>
-            
+
         </ul>
     </div>
 </div>
@@ -167,15 +167,120 @@
             </li>
             {% for categoria in categorias %}
             <li class="nav-item">
-                <a href="{% url 'tienda' %}?categoria={{ categoria.Nombre }}" >
+                <a href="{% url 'tienda' %}?categoria={{ categoria.Nombre }}">
                     {{ categoria.Nombre }}
                 </a>
             </li>
             {% endfor %}
-            
-            
-           
+
+
+
         </ul>
     </div>
 </div>
-{% endif %}
+{% endif %}-->
+<nav class="navbar navbar-expand-lg navbar-dark " style="background-color:  #770000; max-height: 50px;" >
+    <div class="container-fluid">
+   
+
+        <!-- Botón de hamburguesa para dispositivos móviles -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Contenido del menú -->
+        <div class="collapse navbar-collapse " id="navbarNav">
+            <ul class=" submenu  navbar-nav me-auto mb-2 mb-lg-0">
+                {% if user.is_staff %}
+                <!-- Menú para empleados (is_staff) -->
+                <li class="menu-item" style="min-width:40%;margin-left:3rem;">
+                    <span class="text-light">
+                        <a href="{% url 'home' %}" sty>
+                            <svg class="custom-icon" xmlns="http://www.w3.org/2000/svg"style="min-width: 30rem;" fill="currentColor"
+                                class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+                            </svg>
+                        </a>
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a href="{%url 'tienda'%}">Tienda</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'adminProductos' %}">Productos</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'adminTransacciones' %}">Transacciones</a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'inventario' %}">Inventario</a>
+                </li>
+                {% if user.is_authenticated and user.is_superuser %}
+                <li class="nav-item">
+                    <a href="{% url 'Permisos' %}"> Permisos</a>
+                </li>
+                {% endif %}
+                <li class="nav-item " style="position: absolute; right:0.5; ">
+                    <h5 style=" color:#ffffff; ">Hola, {{user.nombre}}</h5>
+                </li>
+                {% elif user.is_authenticated %}
+                <!-- Menú para clientes (no is_staff) -->
+                <li class="menu-item" style="min-width:40%;margin-left:3rem;">
+                    <span class="text-light">
+                        <a href="{% url 'home' %}" sty>
+                            <svg class="custom-icon" xmlns="http://www.w3.org/2000/svg"style="min-width: 30rem;" fill="currentColor"
+                                class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+                            </svg>
+                        </a>
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a href="{%url 'tienda'%}">Tienda</a>
+                </li>
+
+                {% for categorias in categorias %}
+                <li class="nav-item">
+                    <a href="{% url 'tienda' %}?categoria={{ categoria.Nombre }}">
+                        {{ categorias.Nombre }}
+                    </a>
+                </li>
+                {% endfor %}
+                <li class="nav-item " style="position: absolute; right:0.5; ">
+                    <h5 style=" color:#ffffff; ">Hola, {{user.nombre}}</h5>
+                </li>
+                {% else %}
+                <!-- Menú para usuarios no autenticados -->
+                <li class="menu-item" style="min-width:40%;margin-left:3rem;">
+                    <span class="text-light">
+                        <a href="{% url 'home' %}" sty>
+                            <svg class="custom-icon" xmlns="http://www.w3.org/2000/svg"style="min-width: 30rem;" fill="currentColor"
+                                class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                                <path
+                                    d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+                            </svg>
+                        </a>
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a href="{%url 'tienda'%}">Tienda</a>
+                </li>
+                {% for categoria in categorias %}
+                <li class="nav-item">
+                    <a href="{% url 'tienda' %}?categoria={{ categoria.Nombre }}">
+                        {{ categoria.Nombre }}
+                    </a>
+                </li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    </div>
+</nav>

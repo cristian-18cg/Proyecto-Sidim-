@@ -138,8 +138,30 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/modal.js' %}"></script>
-
-
+    {% if mensaje_txt %}
+    <div class="modal fade" id="mensaje" tabindex="-1" aria-labelledby="mensaje" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn2 btn btn-primary" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                        <h2>Aviso</h2>
+                </div>
+                <div class="modal-body">
+                    <p id="modalMessageText">  {{ mensaje_txt }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#successModal').modal('show');
+        });
+    </script>
+    {% endif %}
     {% if registrado_mensaje %}
     <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -158,14 +180,14 @@
             </div>
         </div>
     </div>
-
+    
     <script>
         $(document).ready(function () {
             $('#successModal').modal('show');
         });
     </script>
     {% endif %}
-
+  
     {% if error %}
     <script>
         // Muestra el modal y establece el mensaje de error

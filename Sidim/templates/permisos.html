@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Permisos de usuario{% endblock %}
 {% block content %}
-<div class="container" style="min-width:70%;min-height:100hv;justify-content: center;align-items: center;   ">
+<div class="container" style="min-height:100hv;justify-content: center;align-items: center;   ">
     <h2>Permisos</h2>
     <form class="d-flex" method="get" action="{% url 'tienda' %}">
         <input class="form-control me-2 " type="search" placeholder="Buscar usuario" aria-label="Buscar"
@@ -24,9 +24,7 @@
         </thead>
         <tbody id="detallesTabla">
             {% for usuario in usuarios %}
-             {% for group in usuario.groups.all %}
-                grupos = [group.name for group in usuario.groups.all()]
-            {% endfor %}
+             
             <tr>
                 <td>{{ usuario.idusuario }}</td>
                 <td>{{ usuario.nombre }}</td>
@@ -44,10 +42,9 @@
                     <a href="#" class="editar-usuario" data-toggle="modal" data-target="#editarUsuarioModal"
                         data-id="{{ usuario.idusuario }}" data-nombre="{{ usuario.nombre }}"
                         data-apellido="{{ usuario.apellido }}" data-apellido="{{ usuario.apellido }}"
-                        data-correo="{{ usuario.correo }}" data-telefono="{{ usuario.telefono }}"
-                        data-grupos="{{ grupos|safe }}">
+                        data-correo="{{ usuario.correo }}" data-telefono="{{ usuario.telefono }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            class="bi bi-pencil-square" viewBox="0 0 16 16" style="color: #770000;">
                             <path
                                 d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                             <path fill-rule="evenodd"
@@ -65,8 +62,6 @@
 
 
 
-
-<!-- Editamos usuario modal-->
 <!-- Editamos usuario modal-->
 <div class="modal fade" id="editarUsuarioModal" tabindex="-1" role="dialog" aria-labelledby="editarUsuarioModalLabel"
     aria-hidden="true">
@@ -80,47 +75,51 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post">
+                <form method="post" action="{% url 'editar_grupo' %}">
                     {% csrf_token %}
                     <!-- Campo oculto para el ID del usuario -->
                     <input type="hidden" name="idUsuario" id="idUsuario">
                     <!-- Campos del formulario para editar el usuario -->
                     <div class="col-sm-12">
                         <label for="nombreUsuario" class="form-label">Nombre </label>
-                        <input type="text" class="form-control" id="nombreUsuario" name="nombreUsuario"
-                            autocomplete="off">
+                        <input type="text" class="form-control disabled" id="nombreUsuario" name="nombreUsuario"
+                            autocomplete="off" disabled>
                     </div>
 
                     <!-- Agregar campos para otros datos del usuario -->
                     <div class="col-sm-12">
                         <label for="apellidoUsuario" class="form-label">Apellido </label>
                         <input type="text" class="form-control" id="apellidoUsuario" name="apellidoUsuario"
-                            autocomplete="off">
+                            autocomplete="off"disabled>
                     </div>
 
                     <div class="col-sm-12">
                         <label for="correoUsuario" class="form-label">Correo </label>
                         <input type="text" class="form-control" id="correoUsuario" name="correoUsuario"
-                            autocomplete="off">
+                            autocomplete="off" readonly>
                     </div>
 
                     <div class="col-sm-12">
                         <label for="telefonoUsuario" class="form-label">Teléfono</label>
                         <input type="text" class="form-control" id="telefonoUsuario" name="telefonoUsuario"
-                            autocomplete="off">
+                            autocomplete="off"disabled>
                     </div>
 
                     <div class="col-sm-12">
                         <label for="gruposUsuario" class="form-label">Grupos</label>
-                        <select multiple class="form-control" id="gruposUsuario" name="gruposUsuario">
-                            <!-- Los grupos se llenarán dinámicamente con JavaScript -->
+                        <select  class="form-control" id="gruposUsuario" name="gruposUsuario">
+                            <option value="Ninguna">Ninguna</option>
+                            {% for grupo in grupos %}
+                                <option value="{{ grupo.id }}">{{ grupo.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer"  style="margin-top:5%">
                         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-                        <button type="button" class="btn2 btn-primary" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn2 btn btn-primary" data-dismiss="modal">Cancelar</button>
                     </div>
                 </form>
+                
             </div>
         </div>
     </div>
@@ -134,7 +133,7 @@
             var apellido = $(this).data('apellido');
             var correo = $(this).data('correo');
             var telefono = $(this).data('telefono');
-            var grupos = JSON.parse($(this).data('grupos'));
+          
 
             // Llenar los campos del modal con los datos del usuario
             $('#editarUsuarioModal').find('#idUsuario').val(id);
@@ -142,17 +141,7 @@
             $('#editarUsuarioModal').find('#apellidoUsuario').val(apellido);
             $('#editarUsuarioModal').find('#correoUsuario').val(correo);
             $('#editarUsuarioModal').find('#telefonoUsuario').val(telefono);
-
-            // Limpiar y llenar el campo de selección de grupos
-            var selectGrupos = $('#editarUsuarioModal').find('#gruposUsuario');
-            selectGrupos.val(null);  // Limpiar la selección anterior
-            selectGrupos.trigger('change');  // Disparar evento change para actualizar el campo de selección
-
-            grupos.forEach(function (grupo) {
-                var option = new Option(grupo, grupo, true, true);
-                selectGrupos.append(option).trigger('change');
-            });
-
+           
             // Mostrar el modal
             $('#editarUsuarioModal').modal('show');
         });

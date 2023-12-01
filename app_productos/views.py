@@ -51,9 +51,9 @@ def crear_proveedor(request):
             nuevo_proveedor.save()
 
         except Exception as e:
-            error_message = str(e)
-            print(e)
-            # Manejar el error si es necesario
+            error_message = "Error al crear el proveedor: revisa los campos de nuevo y vuelve a intentar."
+            return render(request,"adminProductos.html",{ "error": error_message})
+            
     return redirect('adminProductos')  # Redirigir en caso de que no sea un método POST
 
 @staff_member_required
@@ -76,8 +76,8 @@ def editar_proveedor(request):
             proveedor.save()  # Guarda los cambios en la base de datos
 
         except Exception as e:
-            error_message = str(e)
-            # Maneja el mensaje de error aquí si es necesario
+            error_message = f"Error al crear el producto: {str(e)}"
+            print(error_message)
     return redirect('adminProductos')
 
 @staff_member_required
@@ -103,8 +103,12 @@ def crear_producto(request):
                 precio=precio_producto,
                 categoria=idcategoria,
                 descripcion=descripcion_producto,
-                proveedor = idproveedor,
             )
+            nuevo_producto.save()
+            print(nuevo_producto)
+            
+            # Asignar el proveedor después de crear el producto
+            nuevo_producto.idProveedor = idproveedor
             nuevo_producto.save()
 
             if 'imagenProducto' in request.FILES:
@@ -114,8 +118,8 @@ def crear_producto(request):
 
             return redirect('adminProductos')
         except Exception as e:
-            error_message = str(e)
-            # Manejar el error si es necesario
+            error_message = f"Error al crear el producto: {str(e)}"
+            print(error_message)
 
     return redirect('adminProductos')  # Redirigir en caso de que no sea un método POST
 
@@ -129,10 +133,11 @@ def editar_producto(request):
             proveedor_id = request.POST.get('idProveedor')  
             descripcion_producto = request.POST.get('descripcionProducto')
             precio_producto = request.POST.get('precioProducto')
-
+            imagen_producto = request.FILES.get('imagenProducto', None)
+            print(imagen_producto)
             # Busca la instancia de Producto por ID
             producto = Producto.objects.get(idProducto=id_producto)
-
+            print(producto)
             # Busca la instancia de CategoriaProducto por ID
             categoria_producto = CategoriaProducto.objects.get(idCategoria=id_categoria)
 
@@ -145,14 +150,17 @@ def editar_producto(request):
             producto.descripcion = descripcion_producto
             producto.precio = precio_producto
             producto.idProveedor = idproveedor
-
-            producto.save()  # Guarda los cambios en la base de datos
+            
+            if imagen_producto is not None:
+                producto.imagen_producto = imagen_producto
+          
+            producto.save()
 
             return redirect('adminProductos')
 
         except Exception as e:
-            error_message = str(e)
-            # Maneja el mensaje de error aquí si es necesario
+            error_message = f"Error al editar el producto: {str(e)}"
+            print(error_message)
     return redirect('adminProductos')
 
 @staff_member_required

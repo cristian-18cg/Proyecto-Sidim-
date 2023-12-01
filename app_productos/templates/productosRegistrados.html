@@ -1,8 +1,10 @@
+{% load static %}
 <div class="container-fluid px-0" style="width: 90%;">
     <h1>Productos</h1>
     <table class="table">
         <thead>
             <tr>
+                <th style="width: 10%;">Imagen</th>
                 <th style="width: 10%;">ID Producto</th>
                 <th style="width: 20%;">Nombre</th>
                 <th style="width: 10%;">Categoría</th>
@@ -14,18 +16,29 @@
         <tbody>
             {% for producto in productos %}
             <tr>
+                <td class="align-self-start">
+                    {% if producto.imagen_producto %}
+                    <img src="{{ producto.imagen_producto.url }}" alt="{{ producto.nombre }}"
+                        width="70" height="70">
+                    {% else %}
+                    <!-- imagen predeterminada tapa sidim  -->
+                    <img src="{% static 'images/TapaSidimNegro.png' %}" alt="Imagen Predeterminada"
+                        width="70">
+                    {% endif %}
+                </td>
                 <td>{{ producto.idProducto }}</td>
                 <td>{{ producto.nombre }}</td>
                 <td>{{ producto.categoria }}</td>
                 <td>{{ producto.idProveedor }}</td>
                 <td>{{ producto.descripcion }}</td>
                 <td>{{ producto.precio }}</td>
+
                 <td>
                     <!-- Botón para abrir el modal "Editar Producto" -->
                     <a href="#" class="editar-producto" data-toggle="modal" data-target="#editarProductoModal"
                         data-id="{{ producto.idProducto }}" data-nombre="{{ producto.nombre }}"
                         data-categoria="{{ producto.categoria }}" data-descripcion="{{ producto.descripcion }}"
-                        data-precio="{{ producto.precio }}">
+                        data-precio="{{ producto.precio }}" style="color:#770000">
                         <svg id="editProduct" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                             fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path
@@ -66,7 +79,7 @@
                         {% include 'formProducto.html' %}
                         <div class="form-group">
                             <label for="imagenProducto">Imagen</label>
-                            <input type="file" class="form-control-file" id="imagenProducto" name="imagenProducto" accept=".jpg, .jpeg, .png, image/jpeg, image/png">
+                            <input type="file" class="form-control-file" id="imagenProducto" name="imagenProducto" accept=".jpg, .jpeg, .png,.webp, image/jpeg, image/png">
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Crear Producto</button>
@@ -92,12 +105,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="{% url 'editar_producto' %}">
+                    <form method="post" action="{% url 'editar_producto' %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         <!-- Campo oculto para el ID del producto -->
                         <input type="hidden" name="idProducto" id="idProducto">
                         <!-- Campos del formulario para crear un nuevo producto -->
                         {% include 'formProducto.html' %}
+                        <div class="form-group">
+                           
+                            
+
+                            <label for="imagenProducto">Imagen</label>
+                            <input type="file" class="form-control-file" id="NuevaimagenProducto" name="imagenProducto" accept=".jpg,.webp, .jpeg, .png, image/jpeg, image/png">
+                        </div>
 
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
@@ -131,14 +151,14 @@
             var categoria = $(this).data('categoria');
             var descripcion = $(this).data('descripcion');
             var precio = $(this).data('precio');
-
+          
             // Llenar los campos del modal con los datos del producto
             $('#editarProductoModal').find('#idProducto').val(id);
             $('#editarProductoModal').find('#nombreProducto').val(nombre);
             $('#editarProductoModal').find('#categoriaProducto').val(categoria);
             $('#editarProductoModal').find('#descripcionProducto').val(descripcion);
             $('#editarProductoModal').find('#precioProducto').val(precio);
-
+            
             // Mostrar el modal
             $('#editarProductoModal').modal('show');
         });

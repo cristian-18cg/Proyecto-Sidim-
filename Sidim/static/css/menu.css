@@ -65,15 +65,25 @@ h3{
 
  /****************************************************************************************/
 
+ .navbar-nav {
+    display: flex;
+    align-items: center;
+}
 
+.navbar-nav .nav-item {
+    margin-right: 4%; /* Ajusta el margen entre elementos de la lista si es necesario */
+}
+
+.navbar-nav .nav-link {
+    padding: 8px 15px; /* Ajusta el relleno de los elementos de la lista si es necesario */
+}
 
 /*Estilos de la casa de inicio*/
 .custom-icon {
     color: #ffffff;
-    width: 10%;
-    height: 10%;
+    max-width: 10%;
+    max-height: 10%;
     margin-top: 0%;
-    margin-right: 13%;
 
 }
 
@@ -139,7 +149,7 @@ h3{
     color: #ffffff;
     text-decoration: none;
     font-size: 120%;
-    margin-bottom: 15%;
+
     text-align: center;
     padding: 5px;
     opacity: 500%;

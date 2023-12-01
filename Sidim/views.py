@@ -16,7 +16,7 @@ from django.urls import reverse_lazy,reverse
 from django.views import View
 from django.http import HttpRequest
 from django.contrib.auth.views import PasswordResetConfirmView
-
+from django.contrib.auth.models import Group
 def error_404 (request,exception):
     return render(request,'404.html',status=404)
 
@@ -55,15 +55,9 @@ def home(request):
 
    return render(request, 'home.html', {'form_registro': form_registro})
 
-
-       
-
 def cerrarsesion(request):
   logout(request)
   return redirect('home')
-
-
-
 @login_required 
 def perfil(request):
     # Obtén el usuario logeado actualmente
@@ -119,16 +113,41 @@ def cambiar_contrasena(request):
             update_session_auth_hash(request, request.user)
 
             messages.success(request, 'La contraseña ha sido cambiada exitosamente.')
+            return render(request, 'profile.html')
         else:
             messages.error(request, 'Hubo un error al cambiar la contraseña. Asegúrate de ingresar la contraseña actual correctamente y de que las nuevas contraseñas coincidan.')
-
+            return render(request, 'profile.html')
     return render(request, 'profile.html')
  
 def permisos(request):
     usuarios = Usuarios.objects.all()
-    
-    return render(request, 'permisos.html',{'usuarios': usuarios})
+    grupos = Group.objects.all()
+    return render(request, 'permisos.html',{'usuarios': usuarios, 'grupos': grupos})
 
+def editar_grupo(request):
+    
+    if request.method == 'POST':
+        # Procesar el formulario de edición, por ejemplo, actualizar los grupos
+        correo_usuario = request.POST.get('correoUsuario')
+        usuario = Usuarios.objects.filter(correo=correo_usuario).first()
+        print(correo_usuario)
+        if usuario:
+            # Procesar el formulario de edición, por ejemplo, actualizar los grupos
+            grupo_id = request.POST.get('gruposUsuario')
+            grupo = get_object_or_404(Group, id=grupo_id)
+           
+            usuario.groups.set([grupo])
+            
+            print(grupo_id)
+            if grupo.name == 'Empleado':
+              usuario.is_staff = True
+              usuario.save()
+            elif grupo.name == 'Cliente':
+                usuario.is_staff = False
+                usuario.save()
+                    
+        return redirect('Permisos')
+    return render(request, 'permisos.html')
 
 class CustomPasswordResetView(View):
     template_name = 'registration/password_reset_form.html'

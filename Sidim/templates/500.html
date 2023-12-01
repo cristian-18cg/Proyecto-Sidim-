@@ -1,0 +1,10 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block title %}Error 500{% endblock %}
+{% block content %}
+    <div class="container" style="min-width: 95%; justify-content:center; align-items: center;">
+        <h1>Error en el servidor</h1>
+        <p>Lo sentimos, algo salió mal en el servidor. Estamos trabajando para solucionarlo.</p>
+        <p><a href="{% url 'home' %}" class="btn btn-primary">Volver al home</a></p>
+    </div>
+{% endblock %}

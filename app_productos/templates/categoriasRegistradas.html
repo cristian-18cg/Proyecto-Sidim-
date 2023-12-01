@@ -1,11 +1,12 @@
 <div class="container-fluid px-0" style="width: 90%;">
     <h1>Categorías</h1>
-    <table class="table" style="width: 80%;">
+    <table class="table " style="min-width: 80%;">
         <!-- Tabla con categorías -->
         <thead>
             <tr>
                 <th style="width: 20%;">ID Categoría</th>
                 <th style="width: 50%;">Nombre</th>
+                <th style="width: 30%;">Editar</th>
             </tr>
         </thead>
         <tbody>
@@ -15,7 +16,7 @@
                 <td>{{ categoria.Nombre }}</td>
                 <td style="width: 10%;">
                     <a href="#" class="editar-categoria" data-toggle="modal" data-target="#editarCategoriaModal"
-                        data-id="{{ categoria.idCategoria }}" data-nombre="{{ categoria.Nombre }}">
+                        data-id="{{ categoria.idCategoria }}" data-nombre="{{ categoria.Nombre }}" style="color:#770000">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-pencil-square" viewBox="0 0 16 16">
                             <path
